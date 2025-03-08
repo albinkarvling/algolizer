@@ -1,0 +1,36 @@
+{
+    "parser": "babel-ts",
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "bracketSpacing": false,
+    "printWidth": 90,
+    "overrides": [
+        {
+            "files": [
+                "package.json",
+                "eslint.config.js",
+                "tsconfig.json",
+                "tsconfig.app.json",
+                "tsconfig.node.json",
+                "vite.config.js"
+            ],
+            "options": {
+                "tabWidth": 2,
+                "parser": "json-stringify"
+            }
+        },
+        {
+            "files": ["*.md", "*.mdx"],
+            "options": {
+                "parser": "markdown"
+            }
+        },
+        {
+            "files": ["*.yaml", "*.yml"],
+            "options": {
+                "bracketSpacing": false,
+                "parser": "yaml"
+            }
+        }
+    ]
+}
