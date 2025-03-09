@@ -2,9 +2,12 @@ import {Grid} from "../types";
 
 const DEFAULT_COLUMN_COUNT = 50;
 const DEFAULT_ROW_COUNT = 20;
-export const initializeGrid = (columnCount = DEFAULT_COLUMN_COUNT) => {
+export const initializeGrid = (
+    rowCount = DEFAULT_ROW_COUNT,
+    columnCount = DEFAULT_COLUMN_COUNT,
+) => {
     const grid: Grid = [];
-    for (let i = 0; i < DEFAULT_ROW_COUNT; i++) {
+    for (let i = 0; i < rowCount; i++) {
         grid.push([]);
         for (let j = 0; j < columnCount; j++) {
             grid[i].push({rowIndex: i, columnIndex: j, isAlive: false});

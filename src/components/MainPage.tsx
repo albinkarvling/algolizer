@@ -11,7 +11,7 @@ export function MainPage() {
             <BoardProvider>
                 <div css={styles.wrapper}>
                     <Sidebar />
-                    <main style={{flex: 1}}>
+                    <main style={{flex: 1, display: "flex", flexDirection: "column"}}>
                         <Header />
                         <Board />
                     </main>
