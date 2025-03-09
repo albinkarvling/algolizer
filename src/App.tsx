@@ -1,5 +1,3 @@
-function App() {
-    return <main className="bg-black"></main>;
-}
+import {MainPage} from "./components";
 
-export default App;
+export default MainPage;
