@@ -1,10 +1,5 @@
 import {css} from "@emotion/react";
 
-export const playbackControls = css`
-    display: grid;
-    gap: 1.5rem;
-`;
-
 export const playbackButtons = css`
     display: flex;
     gap: 0.5rem;
@@ -21,6 +16,10 @@ export const label = css`
     font-weight: 500;
     margin-bottom: 0.75rem;
     opacity: 0.75;
+
+    &:not(:first-child) {
+        margin-top: 1rem;
+    }
 `;
 
 export const playbackSpeed = css`

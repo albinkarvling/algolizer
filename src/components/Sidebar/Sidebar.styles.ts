@@ -18,6 +18,7 @@ export const header = css`
 `;
 
 export const content = css`
+    height: 100%;
     padding: var(--main-padding);
 `;
 
@@ -25,8 +26,6 @@ export const footer = css`
     padding: var(--main-padding);
     display: flex;
     gap: 0.75rem;
-    align-items: end;
-    margin-top: auto;
 
     & > button:first-of-type {
         flex: 1;
