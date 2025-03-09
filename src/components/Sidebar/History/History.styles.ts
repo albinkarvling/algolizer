@@ -1,17 +1,12 @@
 import {css} from "@emotion/react";
 
-export const backContainer = css`
-    padding: var(--main-padding);
-`;
-
 export const backButton = css`
-    margin: -0.5rem;
+    margin: calc(var(--main-padding) / 2);
 `;
 
 export const generationList = css`
-    padding: calc(var(--main-padding) / 1.7) var(--main-padding);
+    padding: calc(var(--main-padding) / 1.7);
     border-top: 1px solid var(--background-accent-controls);
-    margin: 0 -0.5rem;
 `;
 
 export const generationItem = (active: boolean) => css`

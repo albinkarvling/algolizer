@@ -11,17 +11,15 @@ export function History() {
 
     return (
         <>
-            <div css={styles.backContainer}>
-                <Button
-                    size="small"
-                    cssProp={styles.backButton}
-                    variant="text"
-                    onClick={toggleHistoryState}
-                >
-                    <ArrowBack />
-                    History
-                </Button>
-            </div>
+            <Button
+                size="small"
+                cssProp={styles.backButton}
+                variant="text"
+                onClick={toggleHistoryState}
+            >
+                <ArrowBack />
+                History
+            </Button>
             <ul css={styles.generationList}>
                 {generationHistory.map((generation, index) => {
                     const isActiveGeneration = index === currentGeneration;

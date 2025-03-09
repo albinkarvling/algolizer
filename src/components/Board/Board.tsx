@@ -5,7 +5,7 @@ import * as styles from "./Board.styles";
 const CELL_SIZE = 24;
 const BORDER_SIZE = 1;
 export function Board() {
-    const {grid, updateGrid, toggleCellState} = useBoard();
+    const {grid, setupGrid, toggleCellState} = useBoard();
 
     const boardRef = useRef<HTMLDivElement>(null);
     const isDragging = useRef(false);
@@ -27,13 +27,13 @@ export function Board() {
             const rows = Math.floor(boardHeight / (CELL_SIZE + BORDER_SIZE * 2));
             const columns = Math.floor(boardWidth / (CELL_SIZE + BORDER_SIZE * 2));
 
-            updateGrid(rows, columns);
+            setupGrid(rows, columns);
         };
         onResize();
 
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
-    }, [updateGrid]);
+    }, [setupGrid]);
 
     const handleToggleCellState = (rowIndex: number, cellIndex: number) => {
         // prevent the same cell from being updated multiple times in the same drag
@@ -51,7 +51,7 @@ export function Board() {
         document.addEventListener("mouseup", handleMouseUp);
         handleToggleCellState(rowIndex, cellIndex);
     };
-    const handleMouseMove = (rowIndex: number, cellIndex: number) => {
+    const handleMouseEnter = (rowIndex: number, cellIndex: number) => {
         if (!isDragging.current) return;
         handleToggleCellState(rowIndex, cellIndex);
     };
@@ -67,7 +67,7 @@ export function Board() {
                 <div css={styles.row} key={rowIndex}>
                     {row.map((cell, cellIndex) => (
                         <div
-                            onMouseEnter={() => handleMouseMove(rowIndex, cellIndex)}
+                            onMouseEnter={() => handleMouseEnter(rowIndex, cellIndex)}
                             onMouseDown={() => startDrag(rowIndex, cellIndex)}
                             css={styles.cell(cell.isAlive)}
                             key={cellIndex}

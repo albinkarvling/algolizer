@@ -1,7 +1,7 @@
 import {JSX} from "react";
 import {RestartAlt, History as HistoryIcon} from "@mui/icons-material";
 import {SIDEBAR_STATES} from "../../constants";
-import {useSidebarState} from "../../contexts/SidebarStateProvider/SidebarStateProvider";
+import {useSidebarState} from "../../contexts";
 import {AppControls} from "./AppControls";
 import * as styles from "./Sidebar.styles";
 import {History} from "./History";
@@ -19,13 +19,17 @@ export function Sidebar() {
             break;
         case SIDEBAR_STATES.HISTORY:
             sidebarContent = <History />;
+            break;
+        default:
+            sidebarContent = <AppControls />;
     }
     return (
         <div css={styles.container}>
             <h1 css={styles.header}>The Game of Life</h1>
             <div css={styles.content}>{sidebarContent}</div>
             <div css={styles.footer(state === SIDEBAR_STATES.IDLE)}>
-                <Button onClick={resetGrid}>
+                {/* arrow callback to prevent event being passed */}
+                <Button onClick={() => resetGrid()}>
                     <RestartAlt />
                     Reset board
                 </Button>
