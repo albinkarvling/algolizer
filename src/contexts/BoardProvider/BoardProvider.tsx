@@ -4,7 +4,8 @@ import {getNextGeneration, initializeGrid} from "../../utils/grid";
 
 const BoardContext = React.createContext<null | {
     grid: Grid;
-    updateGrid: (rowCount?: number, cellCount?: number) => void;
+    resetGrid: () => void;
+    updateGrid: (rowCount: number, cellCount: number) => void;
     generationHistory: Grid[];
     toggleCellState: (rowIndex: number, cellIndex: number) => void;
     goToNextGeneration: () => void;
@@ -37,9 +38,16 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackSpeed, setPlaybackSpeed] = useState(DEFAULT_PLAYBACK_SPEED);
     const [reachedEnd, setReachedEnd] = useState(false);
+    const gridDimensions = useRef({rowCount: 0, cellCount: 0});
     const intervalRef = useRef<number>(undefined);
 
-    const updateGrid = useCallback((rowCount?: number, cellCount?: number) => {
+    const resetGrid = () => {
+        const {rowCount, cellCount} = gridDimensions.current;
+        updateGrid(rowCount, cellCount);
+    };
+
+    const updateGrid = useCallback((rowCount: number, cellCount: number) => {
+        gridDimensions.current = {rowCount, cellCount};
         setGenerationHistory([initializeGrid(rowCount, cellCount)]);
         setCurrentGeneration(0);
         setReachedEnd(false);
@@ -108,6 +116,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
     const value = {
         grid: currentGrid,
         updateGrid,
+        resetGrid,
         generationHistory,
         columnCount: currentGrid[0].length,
         toggleCellState,

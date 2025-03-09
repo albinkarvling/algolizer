@@ -9,7 +9,7 @@ import {Button} from "../Button";
 import {useBoard} from "../../contexts";
 
 export function Sidebar() {
-    const {updateGrid} = useBoard();
+    const {resetGrid} = useBoard();
     const {state, toggleHistoryState} = useSidebarState();
 
     let sidebarContent: JSX.Element | null = null;
@@ -25,7 +25,7 @@ export function Sidebar() {
             <h1 css={styles.header}>The Game of Life</h1>
             <div css={styles.content}>{sidebarContent}</div>
             <div css={styles.footer(state === SIDEBAR_STATES.IDLE)}>
-                <Button onClick={updateGrid}>
+                <Button onClick={resetGrid}>
                     <RestartAlt />
                     Reset board
                 </Button>
