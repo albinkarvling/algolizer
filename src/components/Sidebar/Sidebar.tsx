@@ -24,7 +24,7 @@ export function Sidebar() {
         <div css={styles.container}>
             <h1 css={styles.header}>The Game of Life</h1>
             <div css={styles.content}>{sidebarContent}</div>
-            <div css={styles.footer}>
+            <div css={styles.footer(state === SIDEBAR_STATES.IDLE)}>
                 <Button onClick={updateGrid}>
                     <RestartAlt />
                     Reset board

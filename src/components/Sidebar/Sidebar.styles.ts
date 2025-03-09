@@ -18,14 +18,16 @@ export const header = css`
 `;
 
 export const content = css`
+    overflow: auto;
     height: 100%;
-    padding: var(--main-padding);
 `;
 
-export const footer = css`
+export const footer = (isIdleState: boolean) => css`
     padding: var(--main-padding);
     display: flex;
     gap: 0.75rem;
+
+    border-top: ${!isIdleState ? "1px solid var(--background-accent-controls)" : "none"};
 
     & > button:first-of-type {
         flex: 1;

@@ -16,7 +16,7 @@ export function AppControls() {
     } = useBoard();
 
     return (
-        <>
+        <div css={styles.content}>
             <span css={styles.label}>Playback Controls</span>
             <div css={styles.playbackButtons}>
                 <Button size="small" onClick={goToPreviousGeneration}>
@@ -49,6 +49,6 @@ export function AppControls() {
                 />
                 <span css={styles.playbackHelper}>{playbackSpeed}ms</span>
             </div>
-        </>
+        </div>
     );
 }

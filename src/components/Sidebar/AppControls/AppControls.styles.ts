@@ -1,11 +1,16 @@
 import {css} from "@emotion/react";
 
+export const content = css`
+    padding: var(--main-padding);
+`;
+
 export const playbackButtons = css`
     display: flex;
     gap: 0.5rem;
 
     & > button {
         flex: 1;
+        justify-content: center;
     }
 `;
 

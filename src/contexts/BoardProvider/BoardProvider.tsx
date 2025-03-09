@@ -5,9 +5,11 @@ import {getNextGeneration, initializeGrid} from "../../utils/grid";
 const BoardContext = React.createContext<null | {
     grid: Grid;
     updateGrid: () => void;
+    generationHistory: Grid[];
     toggleCellState: (rowIndex: number, cellIndex: number) => void;
     goToNextGeneration: () => void;
     goToPreviousGeneration: () => void;
+    goToGeneration: (generation: number) => void;
     columnCount: number;
     currentGeneration: number;
     generationCount: number;
@@ -81,6 +83,11 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         setReachedEnd(false);
     };
 
+    const goToGeneration = (generation: number) => {
+        setCurrentGeneration(generation);
+        setReachedEnd(false);
+    };
+
     useEffect(() => {
         if (!isPlaying) {
             clearInterval(intervalRef.current);
@@ -101,10 +108,12 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
     const value = {
         grid: currentGrid,
         updateGrid,
+        generationHistory,
         columnCount: currentGrid[0].length,
         toggleCellState,
         goToNextGeneration,
         goToPreviousGeneration,
+        goToGeneration,
         currentGeneration,
         generationCount: generationHistory.length,
         isPlaying,

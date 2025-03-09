@@ -54,3 +54,21 @@ export const getNextGeneration = (grid: Grid): Grid => {
         }),
     );
 };
+
+export const getDeadCellCount = (grid: Grid): number => {
+    return grid.reduce(
+        (count, row) =>
+            count +
+            row.reduce((rowCount, cell) => (cell.isAlive ? rowCount : rowCount + 1), 0),
+        0,
+    );
+};
+
+export const getAliveCellCount = (grid: Grid): number => {
+    return grid.reduce(
+        (count, row) =>
+            count +
+            row.reduce((rowCount, cell) => (cell.isAlive ? rowCount + 1 : rowCount), 0),
+        0,
+    );
+};
