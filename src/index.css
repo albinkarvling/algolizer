@@ -34,6 +34,7 @@ button {
   border: none;
   cursor: pointer;
   color: inherit;
+  text-align: left;
 }
 
 ul {

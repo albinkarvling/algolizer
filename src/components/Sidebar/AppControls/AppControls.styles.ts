@@ -2,6 +2,10 @@ import {css} from "@emotion/react";
 
 export const content = css`
     padding: var(--main-padding);
+
+    &:not(:first-child) {
+        border-top: 1px solid var(--background-accent-controls);
+    }
 `;
 
 export const playbackButtons = css`

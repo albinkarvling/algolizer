@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {Grid} from "../../types";
 import {getNextGeneration, initializeGrid} from "../../utils/grid";
+import {Preset, PRESET_GRIDS} from "../../constants/presets";
 
 const BoardContext = React.createContext<null | {
     grid: Grid;
@@ -18,6 +19,8 @@ const BoardContext = React.createContext<null | {
     setIsPlaying: (state: boolean) => void;
     playbackSpeed: number;
     setPlaybackSpeed: React.Dispatch<React.SetStateAction<number>>;
+    activatePreset: (presetId: Preset) => void;
+    activePreset: Preset | null;
 }>(null);
 
 export const useBoard = () => {
@@ -38,12 +41,14 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackSpeed, setPlaybackSpeed] = useState(DEFAULT_PLAYBACK_SPEED);
     const [reachedEnd, setReachedEnd] = useState(false);
+    const [activePreset, setActivePreset] = useState<Preset | null>(null);
     const gridDimensions = useRef({rowCount: 0, cellCount: 0});
     const intervalRef = useRef<number>(undefined);
 
     const resetGrid = () => {
         const {rowCount, cellCount} = gridDimensions.current;
         updateGrid(rowCount, cellCount);
+        setActivePreset(null);
     };
 
     const updateGrid = useCallback((rowCount: number, cellCount: number) => {
@@ -51,7 +56,25 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         setGenerationHistory([initializeGrid(rowCount, cellCount)]);
         setCurrentGeneration(0);
         setReachedEnd(false);
+        setActivePreset(null);
     }, []);
+
+    const activatePreset = (presetId: Preset) => {
+        const preset = PRESET_GRIDS[presetId];
+
+        const {rowCount, cellCount} = gridDimensions.current;
+        const grid = initializeGrid(rowCount, cellCount);
+
+        preset.forEach(([row, cell]) => {
+            grid[row][cell].isAlive = true;
+        });
+
+        setActivePreset(presetId);
+        setGenerationHistory([grid]);
+        setCurrentGeneration(0);
+        setReachedEnd(false);
+        setIsPlaying(false);
+    };
 
     const toggleCellState = (rowIndex: number, cellIndex: number) => {
         setGenerationHistory((prevHistory) => {
@@ -69,6 +92,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         setCurrentGeneration(0);
         setReachedEnd(false);
         setIsPlaying(false);
+        setActivePreset(null);
     };
 
     const goToNextGeneration = useCallback(() => {
@@ -118,6 +142,8 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         updateGrid,
         resetGrid,
         generationHistory,
+        activatePreset,
+        activePreset,
         columnCount: currentGrid[0].length,
         toggleCellState,
         goToNextGeneration,
