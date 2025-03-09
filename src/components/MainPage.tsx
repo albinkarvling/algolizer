@@ -4,6 +4,7 @@ import {Sidebar} from "./Sidebar";
 import {Board} from "./Board";
 import {Header} from "./Header";
 import * as styles from "./MainPage.styles";
+import {IslandControls} from "./IslandControls";
 
 export function MainPage() {
     return (
@@ -15,6 +16,7 @@ export function MainPage() {
                         <Header />
                         <Board />
                     </main>
+                    <IslandControls />
                 </div>
             </BoardProvider>
         </SidebarStateProvider>
