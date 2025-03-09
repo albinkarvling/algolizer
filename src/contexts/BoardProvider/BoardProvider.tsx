@@ -39,11 +39,11 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
     const [reachedEnd, setReachedEnd] = useState(false);
     const intervalRef = useRef<number>(undefined);
 
-    const updateGrid = (rowCount?: number, cellCount?: number) => {
+    const updateGrid = useCallback((rowCount?: number, cellCount?: number) => {
         setGenerationHistory([initializeGrid(rowCount, cellCount)]);
         setCurrentGeneration(0);
         setReachedEnd(false);
-    };
+    }, []);
 
     const toggleCellState = (rowIndex: number, cellIndex: number) => {
         setGenerationHistory((prevHistory) => {
