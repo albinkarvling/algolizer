@@ -9,7 +9,7 @@ export function MainPage() {
         <BoardProvider>
             <div css={styles.wrapper}>
                 <AppControls />
-                <main style={{width: "100%", height: "100%"}}>
+                <main style={{flex: 1}}>
                     <Header />
                     <Board />
                 </main>

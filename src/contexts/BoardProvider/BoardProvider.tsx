@@ -4,7 +4,7 @@ import {getNextGeneration, initializeGrid} from "../../utils/grid";
 
 const BoardContext = React.createContext<null | {
     grid: Grid;
-    updateGrid: (columnCount?: number) => void;
+    updateGrid: () => void;
     toggleCellState: (rowIndex: number, cellIndex: number) => void;
     goToNextGeneration: () => void;
     goToPreviousGeneration: () => void;
@@ -27,9 +27,8 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
     ]);
     const [currentGeneration, setCurrentGeneration] = useState(0);
 
-    const updateGrid = (columnCount?: number) => {
-        setGenerationHistory([initializeGrid(columnCount)]);
-        setGenerationHistory([]);
+    const updateGrid = () => {
+        setGenerationHistory([initializeGrid()]);
         setCurrentGeneration(0);
     };
 

@@ -1,9 +1,6 @@
 import {css} from "@emotion/react";
 
-export const board = css`
-    width: 100%;
-    height: 100%;
-`;
+export const board = css``;
 
 export const row = css`
     display: flex;

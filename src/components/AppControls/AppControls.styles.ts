@@ -5,6 +5,9 @@ export const container = css`
     color: var(--text-controls);
     background-color: var(--background-controls);
     width: var(--width-controls);
+    min-width: var(--min-width-controls);
+    display: flex;
+    flex-direction: column;
 `;
 
 export const header = css`
@@ -16,4 +19,17 @@ export const header = css`
 
 export const content = css`
     padding: var(--main-padding);
+`;
+
+export const footer = css`
+    padding: var(--main-padding);
+    display: flex;
+    gap: 0.75rem;
+    align-items: end;
+    margin-top: auto;
+
+    & > button:first-of-type {
+        flex: 1;
+        justify-content: start;
+    }
 `;

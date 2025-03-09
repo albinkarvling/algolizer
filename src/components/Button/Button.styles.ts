@@ -5,7 +5,7 @@ export const button = (variant: ButtonProps["variant"], size: ButtonProps["size"
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     padding: ${size === "small" ? "0.5rem" : "0.75rem"};
     border-radius: 6px;
     background-color: ${variant !== "text"
