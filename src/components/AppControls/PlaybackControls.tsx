@@ -1,28 +1,19 @@
-import {useEffect, useRef, useState} from "react";
 import {useBoard} from "../../contexts";
 import {ArrowBack, ArrowForward, Pause, PlayArrow} from "@mui/icons-material";
 import * as styles from "./PlaybackControls.styles";
 import {Button} from "../Button";
 
-const DEFAULT_PLAYBACK_SPEED = 300;
 const MIN_PLAYBACK_SPEED = 50;
 const MAX_PLAYBACK_SPEED = 2000;
 export function PlaybackControls() {
-    const {goToNextGeneration, goToPreviousGeneration} = useBoard();
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [playbackSpeed, setPlaybackSpeed] = useState(DEFAULT_PLAYBACK_SPEED);
-    const intervalRef = useRef<number | null>(null);
-
-    useEffect(() => {
-        if (!isPlaying) {
-            clearInterval(intervalRef.current!);
-            intervalRef.current = null;
-            return;
-        }
-
-        intervalRef.current = setInterval(goToNextGeneration, playbackSpeed);
-        return () => clearInterval(intervalRef.current!);
-    }, [isPlaying, playbackSpeed, goToNextGeneration]);
+    const {
+        goToNextGeneration,
+        goToPreviousGeneration,
+        isPlaying,
+        setIsPlaying,
+        playbackSpeed,
+        setPlaybackSpeed,
+    } = useBoard();
 
     return (
         <div css={styles.playbackControls}>
@@ -32,10 +23,7 @@ export function PlaybackControls() {
                     <Button size="small" onClick={goToPreviousGeneration}>
                         <ArrowBack fontSize="medium" />
                     </Button>
-                    <Button
-                        size="small"
-                        onClick={() => setIsPlaying((prevPlaying) => !prevPlaying)}
-                    >
+                    <Button size="small" onClick={() => setIsPlaying(!isPlaying)}>
                         {isPlaying ? (
                             <Pause fontSize="medium" />
                         ) : (
