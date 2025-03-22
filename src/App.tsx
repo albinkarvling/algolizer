@@ -1,3 +1,3 @@
-import {MainPage} from "./components";
+import {GameOfLifePage} from "./game-of-life";
 
-export default MainPage;
+export default GameOfLifePage;

@@ -4,6 +4,13 @@
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --background-primary-sidebar: #0D1B2A;
+  --background-accent-sidebar: #1B263B;
+  --background-accent-hover-sidebar: #1f2c44;
+  --text-primary-sidebar: #fff;
+  --text-secondary-sidebar: #B3B3B3;
+  --width-main-sidebar: 320px;
+
   --background-primary: #fff;
   --background-secondary: #f9f9f9;
   --background-tertiary: #f4f4f4;

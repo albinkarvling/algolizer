@@ -1,0 +1,1 @@
+export {GameOfLifePage} from "./components";

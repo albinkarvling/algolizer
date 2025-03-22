@@ -1,0 +1,1 @@
+export {GameOfLifeSidebar} from "./Sidebar";
