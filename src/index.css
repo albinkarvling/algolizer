@@ -4,6 +4,8 @@
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --main-padding: 1.25rem;
+
   --background-primary-sidebar: #0D1B2A;
   --background-accent-sidebar: #1B263B;
   --background-accent-hover-sidebar: #1f2c44;

@@ -1,6 +1,7 @@
 import {lazy, StrictMode, Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {BrowserRouter, Route, Routes} from "react-router";
+import {Fallback} from "./Fallback";
 import {Layout} from "./Layout";
 import "./index.css";
 
@@ -10,7 +11,7 @@ const GameOfLifePage = lazy(() => import("@game-of-life/index"));
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <BrowserRouter>
-            <Suspense fallback={<>loading...</>}>
+            <Suspense fallback={<Fallback />}>
                 <Routes>
                     <Route element={<Layout />}>
                         <Route index element={<HomePage />} />
