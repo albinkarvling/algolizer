@@ -3,21 +3,25 @@ import * as styles from "./Dropdown.styles";
 import {Button} from "../Button";
 import {ArrowForwardIos} from "@mui/icons-material";
 import {useClickOutside} from "@common/hooks";
+import {Interpolation} from "@emotion/react";
+import {Theme} from "@emotion/react";
 
 export type DropdownGroup<T> = {
-    groupLabel: string;
+    groupLabel?: string;
     items: DropdownItem<T>[];
 };
 export type DropdownItem<T> = {
     id: T;
     label: string;
+    href?: string;
 };
 
 type Props<T> = {
     groups: DropdownGroup<T>[];
     selectedId?: T | null;
-    onSelect: (id: T) => void;
+    onSelect?: (id: T) => void;
     noSelectionLabel?: string;
+    cssProp?: Interpolation<Theme>;
 };
 
 export function Dropdown<T extends string>({
@@ -25,6 +29,7 @@ export function Dropdown<T extends string>({
     onSelect,
     selectedId,
     noSelectionLabel = "None selected",
+    cssProp,
 }: Props<T>) {
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -32,7 +37,7 @@ export function Dropdown<T extends string>({
     useClickOutside(containerRef, () => setOpen(false));
 
     const handleSelect = (id: T) => {
-        onSelect(id);
+        onSelect?.(id);
         setOpen(false);
     };
 
@@ -40,7 +45,7 @@ export function Dropdown<T extends string>({
         .flatMap((group) => group.items)
         .find((item) => item.id === selectedId);
     return (
-        <div css={styles.container} ref={containerRef}>
+        <div css={[styles.container, cssProp]} ref={containerRef}>
             <button css={styles.selectButton} onClick={() => setOpen(!open)}>
                 {selectedItem?.label || noSelectionLabel}
                 <ArrowForwardIos
@@ -51,9 +56,11 @@ export function Dropdown<T extends string>({
 
             {open && (
                 <ul css={styles.dropdownGroups}>
-                    {groups.map((group) => (
-                        <li key={group.groupLabel}>
-                            <span css={styles.groupLabel}>{group.groupLabel}</span>
+                    {groups.map((group, index) => (
+                        <li key={group.groupLabel || index}>
+                            {group.groupLabel && (
+                                <span css={styles.groupLabel}>{group.groupLabel}</span>
+                            )}
                             <ul>
                                 {group.items.map((item) => (
                                     <li key={item.id}>
@@ -63,6 +70,7 @@ export function Dropdown<T extends string>({
                                             cssProp={styles.dropdownItem(
                                                 selectedId === item.id,
                                             )}
+                                            href={item.href}
                                         >
                                             {item.label}
                                         </Button>

@@ -1,1 +1,1 @@
-export {GameOfLifePage} from "./components";
+export {GameOfLifePage as default} from "./components";

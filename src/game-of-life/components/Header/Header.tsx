@@ -1,14 +1,14 @@
 import {History} from "@mui/icons-material";
-import {Button} from "@common/components";
+import {Button, Header} from "@common/components";
 import {useBoard, useSidebarState} from "@game-of-life/contexts";
 import * as styles from "./Header.styles";
 
-export function Header() {
+export function GameOfLifeHeader() {
     const {currentGeneration} = useBoard();
     const {toggleHistoryState} = useSidebarState();
 
     return (
-        <div css={styles.header}>
+        <Header>
             <div css={styles.currentGeneration}>
                 <Button
                     variant="text"
@@ -20,6 +20,6 @@ export function Header() {
                     Generation: {currentGeneration}
                 </Button>
             </div>
-        </div>
+        </Header>
     );
 }

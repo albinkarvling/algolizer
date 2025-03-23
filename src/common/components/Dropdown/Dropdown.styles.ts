@@ -22,6 +22,7 @@ export const selectButton = css`
 export const dropdownGroups = css`
     display: grid;
     gap: 0.75rem;
+    z-index: 100;
     position: absolute;
     top: calc(100% + 0.5rem);
     width: 100%;

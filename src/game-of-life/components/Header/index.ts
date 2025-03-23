@@ -1,1 +1,1 @@
-export {Header} from "./Header";
+export {GameOfLifeHeader} from "./Header";
