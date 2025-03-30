@@ -42,14 +42,12 @@ const pathKeyframes = keyframes`
 `;
 
 const getBackgroundColor = (tile: Tile) => {
-    if (tile.isStart) return "var(--tile-start)";
-    if (tile.isEnd) return "var(--tile-end)";
     if (tile.isWall) return "var(--tile-wall)";
     if (tile.isVisited) return "var(--tile-visited)";
     if (tile.isPath) return "var(--tile-path)";
 };
 const getAnimation = (tile: Tile) => {
-    if (tile.isStart || tile.isEnd) return;
+    if (tile.isEnd) return;
     if (tile.isVisited) return visitedKeyframes;
     if (tile.isPath) return pathKeyframes;
     return "none";
@@ -58,6 +56,8 @@ const getAnimation = (tile: Tile) => {
 export const tile = (tile: Tile, shouldAnimate: boolean) => css`
     flex: 1;
     aspect-ratio: 1;
+    display: grid;
+    place-items: center;
     border: 1px solid var(--grid-color);
     background-color: ${getBackgroundColor(tile)};
     animation: ${shouldAnimate

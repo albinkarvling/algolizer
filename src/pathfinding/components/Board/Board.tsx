@@ -4,6 +4,7 @@ import {useBoard} from "@pathfinding/contexts";
 import {Tile} from "@pathfinding/types";
 import {AlgorithmId} from "@pathfinding/algorithms/types";
 import {useMouseControls, useResponsiveGrid} from "@pathfinding/hooks";
+import {Flag, Navigation} from "@mui/icons-material";
 
 const TILE_SIZE = 24;
 
@@ -30,7 +31,10 @@ const BoardTile = memo(
                 data-is-start={tile.isStart}
                 data-is-end={tile.isEnd}
                 style={{minWidth: TILE_SIZE, minHeight: TILE_SIZE}}
-            />
+            >
+                {tile.isStart && <Navigation sx={{rotate: "90deg"}} />}
+                {tile.isEnd && <Flag />}
+            </div>
         );
     },
     areTilePropsEqual,
