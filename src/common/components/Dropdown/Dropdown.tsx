@@ -18,6 +18,7 @@ export type DropdownItem<T> = {
 
 type Props<T> = {
     groups: DropdownGroup<T>[];
+    label: string;
     selectedId?: T | null;
     onSelect?: (id: T) => void;
     noSelectionLabel?: string;
@@ -29,6 +30,7 @@ export function Dropdown<T extends string>({
     onSelect,
     selectedId,
     noSelectionLabel = "None selected",
+    label,
     cssProp,
 }: Props<T>) {
     const [open, setOpen] = useState(false);
@@ -46,7 +48,17 @@ export function Dropdown<T extends string>({
         .find((item) => item.id === selectedId);
     return (
         <div css={[styles.container, cssProp]} ref={containerRef}>
-            <button css={styles.selectButton} onClick={() => setOpen(!open)}>
+            <label css={styles.label} htmlFor={label}>
+                {label}
+            </label>
+
+            <button
+                id={label}
+                css={styles.selectButton}
+                onClick={() => setOpen(!open)}
+                aria-expanded={open}
+                aria-haspopup
+            >
                 {selectedItem?.label || noSelectionLabel}
                 <ArrowForwardIos
                     style={{rotate: open ? "-90deg" : "90deg"}}

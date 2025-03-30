@@ -8,6 +8,7 @@ export function PathfindingSidebar() {
     return (
         <Sidebar>
             <Dropdown
+                label="Algorithm"
                 groups={[{items: ALGORITHM_SELECTION}]}
                 selectedId={currentAlgorithmId}
                 onSelect={switchAlgorithm}

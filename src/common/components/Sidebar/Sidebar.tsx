@@ -20,8 +20,8 @@ export function Sidebar({children}: {children?: React.ReactNode}) {
     return (
         <aside css={styles.container}>
             <div css={styles.header}>
-                <label css={styles.label}>Available Games</label>
                 <Dropdown
+                    label="Available Games"
                     groups={gameGroups}
                     onSelect={console.log}
                     noSelectionLabel="Select a game"

@@ -15,12 +15,3 @@ export const header = css`
     padding: var(--main-padding);
     border-bottom: 1px solid var(--background-accent-sidebar);
 `;
-
-export const label = css`
-    display: block;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    opacity: 0.75;
-`;
