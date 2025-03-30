@@ -3,12 +3,12 @@ import {AlgorithmId} from "@pathfinding/algorithms/types";
 
 export const ALGORITHM_SELECTION: DropdownItem<AlgorithmId>[] = [
     {
-        id: "bfs",
-        label: "Breadth First Search",
-    },
-    {
         id: "dijkstra",
         label: "Dijkstra's",
+    },
+    {
+        id: "bfs",
+        label: "Breadth First Search",
     },
     {
         id: "astar",
@@ -17,5 +17,13 @@ export const ALGORITHM_SELECTION: DropdownItem<AlgorithmId>[] = [
     {
         id: "gbfs",
         label: "Greedy Best First Search",
+    },
+    {
+        id: "bidirectionalBfs",
+        label: "Bidirectional BFS",
+    },
+    {
+        id: "dfs",
+        label: "Depth First Search",
     },
 ];

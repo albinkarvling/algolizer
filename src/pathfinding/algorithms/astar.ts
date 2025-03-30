@@ -1,63 +1,94 @@
-import {Grid, Step, Tile} from "@pathfinding/types";
-import {getNeighbors} from "@pathfinding/utils";
+import {Tile, Step} from "@pathfinding/types";
 
 function heuristic(a: Tile, b: Tile): number {
-    // Manhattan distance (works well for 4-directional grid)
     return Math.abs(a.row - b.row) + Math.abs(a.column - b.column);
 }
 
-export function astar(grid: Grid, start: Tile, end: Tile) {
-    const steps: Step[] = [];
-    const openSet: Tile[] = [start];
-    const visited = new Set<string>();
+function reconstructPath(end: Tile): Step[] {
+    const path: Step[] = [];
+    let current: Tile | undefined = end;
+    while (current?.previous) {
+        path.unshift({row: current.row, column: current.column, type: "path"});
+        current = current.previous;
+    }
+    return path;
+}
 
-    for (const row of grid) {
-        for (const tile of row) {
-            tile.g = Infinity; // Cost from start
-            tile.f = Infinity; // Estimated cost (g + h)
-            tile.previous = undefined;
+function getNeighbors(grid: Tile[][], tile: Tile): Tile[] {
+    const {row, column} = tile;
+    const neighbors: Tile[] = [];
+    const deltas = [
+        [-1, 0],
+        [1, 0],
+        [0, -1],
+        [0, 1], // up, down, left, right
+    ];
+
+    for (const [dRow, dCol] of deltas) {
+        const newRow = row + dRow;
+        const newCol = column + dCol;
+        if (
+            newRow >= 0 &&
+            newRow < grid.length &&
+            newCol >= 0 &&
+            newCol < grid[0].length
+        ) {
+            neighbors.push(grid[newRow][newCol]);
         }
     }
 
+    return neighbors;
+}
+
+export function astar(grid: Tile[][], start: Tile, end: Tile): Step[] {
+    const openSet: Tile[] = [];
+    const visitedSet = new Set<string>();
+    const visitedSteps: Step[] = [];
+
     start.g = 0;
     start.f = heuristic(start, end);
+    openSet.push(start);
 
     while (openSet.length > 0) {
-        // Sort openSet by lowest f-score
-        openSet.sort((a, b) => a.f! - b.f!);
+        // Sort by f-score, tie-breaking with heuristic to favor directionality
+        openSet.sort((a, b) => {
+            const fA = a.f ?? Infinity;
+            const fB = b.f ?? Infinity;
+            if (fA !== fB) return fA - fB;
+
+            // Tie-break: prefer closer to goal
+            return heuristic(a, end) - heuristic(b, end);
+        });
+
         const current = openSet.shift()!;
+        const currentKey = `${current.row}-${current.column}`;
 
-        steps.push({row: current.row, column: current.column, type: "visit"});
+        if (visitedSet.has(currentKey)) continue;
+        visitedSet.add(currentKey);
 
-        if (current === end) break;
+        if (!current.isStart && !current.isEnd) {
+            visitedSteps.push({row: current.row, column: current.column, type: "visit"});
+        }
 
-        visited.add(`${current.row}-${current.column}`);
+        if (current === end) {
+            const pathSteps = reconstructPath(current);
+            return [...visitedSteps, ...pathSteps];
+        }
 
-        const neighbors = getNeighbors(current, grid);
+        const neighbors = getNeighbors(grid, current);
         for (const neighbor of neighbors) {
-            const key = `${neighbor.row}-${neighbor.column}`;
-            if (neighbor.isWall || visited.has(key)) continue;
+            if (neighbor.isWall) continue;
 
-            const tentativeG = current.g! + 1; // Uniform cost
+            const tentativeG = (current.g ?? Infinity) + 1;
 
-            if (tentativeG < neighbor.g!) {
+            if (tentativeG < (neighbor.g ?? Infinity)) {
                 neighbor.previous = current;
                 neighbor.g = tentativeG;
-                neighbor.f = neighbor.g + heuristic(neighbor, end);
-
-                if (!openSet.includes(neighbor)) {
-                    openSet.push(neighbor);
-                }
+                neighbor.f = neighbor.g + heuristic(neighbor, end) * 1.1; // weighted heuristic
+                openSet.push(neighbor);
             }
         }
     }
 
-    // Reconstruct shortest path
-    let curr: Tile | undefined = end;
-    while (curr?.previous) {
-        steps.push({row: curr.row, column: curr.column, type: "path"});
-        curr = curr.previous;
-    }
-
-    return steps;
+    return visitedSteps;
 }
