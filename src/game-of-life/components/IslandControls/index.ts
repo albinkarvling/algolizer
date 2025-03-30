@@ -1,0 +1,1 @@
+export {GameOfLifeIslandControls} from "./IslandControls";

@@ -1,0 +1,11 @@
+:root {
+    --grid-color: #ccc;
+    --tile-empty: #fff;
+    --tile-start: #00f;
+    --tile-end: #f00;
+    --tile-wall: #000;
+    --tile-visited: #64efff;
+    --tile-visited-transition: #d800f5;
+    --tile-path: #ff0;
+    --tile-border: #ccc;
+}

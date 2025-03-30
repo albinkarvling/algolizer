@@ -1,30 +1,34 @@
-// TODO: make this component a generic component
-// remove the dependency on the contexts and use props instead
-
 import {ArrowBack, ArrowForward, Pause, PlayArrow} from "@mui/icons-material";
 import {Button} from "../Button";
 import * as styles from "./IslandControls.styles";
 import {AnimatePresence, motion} from "framer-motion";
-import {useBoard, useSidebarState} from "@game-of-life/contexts";
-import {SIDEBAR_STATES} from "@game-of-life/constants";
 
 const MIN_PLAYBACK_SPEED = 50;
 const MAX_PLAYBACK_SPEED = 2000;
-export function IslandControls() {
-    const {state} = useSidebarState();
-    const {
-        setIsPlaying,
-        isPlaying,
-        playbackSpeed,
-        setPlaybackSpeed,
-        goToPreviousGeneration,
-        goToNextGeneration,
-    } = useBoard();
-
-    const shouldShowIsland = state !== SIDEBAR_STATES.IDLE;
+export function IslandControls({
+    onBackClick,
+    onNextClick,
+    onPlayToggle,
+    playbackSpeed,
+    onSpeedChange,
+    isPlaying,
+    shouldShow,
+    maxPlaybackSpeed = MAX_PLAYBACK_SPEED,
+    minPlaybackSpeed = MIN_PLAYBACK_SPEED,
+}: {
+    isPlaying: boolean;
+    onPlayToggle: (isPlaying: boolean) => void;
+    onBackClick: () => void;
+    onNextClick: () => void;
+    playbackSpeed: number;
+    onSpeedChange: (speed: number) => void;
+    shouldShow: boolean;
+    maxPlaybackSpeed?: number;
+    minPlaybackSpeed?: number;
+}) {
     return (
         <AnimatePresence>
-            {shouldShowIsland && (
+            {shouldShow && (
                 <motion.div
                     initial={{transform: "translate(-50%, 150px)"}}
                     animate={{transform: "translate(-50%, 0)"}}
@@ -32,30 +36,26 @@ export function IslandControls() {
                     css={styles.container}
                 >
                     <div css={styles.playbackButtons}>
-                        <Button
-                            variant="text"
-                            size="small"
-                            onClick={goToPreviousGeneration}
-                        >
+                        <Button variant="text" size="small" onClick={onBackClick}>
                             <ArrowBack />
                         </Button>
                         <Button
                             variant="text"
                             size="small"
-                            onClick={() => setIsPlaying(!isPlaying)}
+                            onClick={() => onPlayToggle(!isPlaying)}
                         >
                             {isPlaying ? <Pause /> : <PlayArrow />}
                         </Button>
-                        <Button variant="text" size="small" onClick={goToNextGeneration}>
+                        <Button variant="text" size="small" onClick={onNextClick}>
                             <ArrowForward />
                         </Button>
                     </div>
                     <input
                         type="range"
-                        min={MIN_PLAYBACK_SPEED}
-                        max={MAX_PLAYBACK_SPEED}
+                        min={minPlaybackSpeed}
+                        max={maxPlaybackSpeed}
                         value={playbackSpeed}
-                        onChange={(e) => setPlaybackSpeed(Number(e.target.value))}
+                        onChange={(e) => onSpeedChange(Number(e.target.value))}
                     />
                 </motion.div>
             )}
