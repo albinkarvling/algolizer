@@ -53,11 +53,13 @@ export function useVisualizerController(
 
     const reset = useCallback(() => setStepIndex(0), []);
     const goToEndStep = useCallback(() => setStepIndex(stepCount.current), []);
+    const goToStep = useCallback((index: number) => setStepIndex(index), []);
 
     return {
         stepIndex,
         goToNextStep,
         goToPrevStep,
+        goToStep,
         reset,
         goToEndStep,
         canStepForward: stepIndex < steps.length,

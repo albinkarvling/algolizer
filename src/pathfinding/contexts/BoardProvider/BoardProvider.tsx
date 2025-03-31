@@ -27,6 +27,9 @@ type BoardContextType = {
     shouldAnimate: boolean;
     switchAlgorithm: (algorithmId: AlgorithmId) => void;
     currentAlgorithmId: AlgorithmId;
+    stepCount: number;
+    stepIndex: number;
+    goToStep: (stepIndex: number) => void;
 };
 
 const BoardContext = createContext<null | BoardContextType>(null);
@@ -58,6 +61,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         stepIndex,
         goToEndStep,
         hasReachedEnd,
+        goToStep,
     } = useVisualizerController(steps, isPlaying, setIsPlaying, playbackSpeed);
 
     useEffect(() => {
@@ -198,6 +202,9 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         currentAlgorithmId: currentAlgorithm.id,
         currentAlgorithm,
         switchAlgorithm,
+        stepIndex,
+        goToStep,
+        stepCount: steps.length,
     };
 
     return <BoardContext.Provider value={value}>{children}</BoardContext.Provider>;
