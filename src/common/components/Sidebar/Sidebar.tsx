@@ -3,16 +3,16 @@ import {Dropdown, DropdownGroup, DropdownItem} from "../Dropdown";
 import * as styles from "./Sidebar.styles";
 import {useLocation} from "react-router";
 
-const gameItems: DropdownItem<GameId>[] = GAME_TYPES.map((gameType) => ({
+const gameItems = GAME_TYPES.map((gameType) => ({
     id: gameType.id,
     label: gameType.name,
     href: gameType.path,
-}));
-const gameGroups: DropdownGroup<GameId>[] = [
+})) satisfies DropdownItem[];
+const gameGroups = [
     {
         items: gameItems,
     },
-];
+] as const satisfies DropdownGroup[];
 
 export function Sidebar({children}: {children?: React.ReactNode}) {
     const gameId = useLocation().pathname.split("/")[1] as GameId;

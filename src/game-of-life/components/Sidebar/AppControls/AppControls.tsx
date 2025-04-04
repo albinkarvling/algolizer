@@ -55,10 +55,8 @@ export function AppControls() {
                 </div>
             </div>
             <div css={styles.content}>
-                <label htmlFor="presets" css={styles.label}>
-                    Presets
-                </label>
                 <Dropdown
+                    label="Presets"
                     selectedId={activePreset}
                     groups={DROPDOWN_PRESETS}
                     onSelect={(preset) => activatePreset(preset.id)}

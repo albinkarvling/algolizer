@@ -1,4 +1,6 @@
+import {DropdownGroup, DropdownItem} from "@common/components";
 import {blobMaze, recursiveDivision, staircase, zebraMaze} from "@pathfinding/obstacles";
+import {Tile} from "@pathfinding/types";
 
 export const OBSTACLE_SELECTION = [
     {
@@ -31,6 +33,15 @@ export const OBSTACLE_SELECTION = [
             },
         ],
     },
-] as const;
+] as const satisfies DropdownGroup<
+    DropdownItem & {
+        generate: (
+            rowCount: number,
+            colCount: number,
+            startTile: Tile,
+            endTile: Tile,
+        ) => number[][];
+    }
+>[];
 
 export type ObstacleId = (typeof OBSTACLE_SELECTION)[number]["items"][number]["id"];
