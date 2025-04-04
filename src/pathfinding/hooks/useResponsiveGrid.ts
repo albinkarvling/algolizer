@@ -11,7 +11,7 @@ type Props = {
 };
 
 const TILE_SIZE = 24 + 1; // 24px + 0.5px border
-const MAX_ROWS = 32;
+const MAX_ROWS = 31;
 const MAX_COLUMNS = 52;
 const SCREEN_SIZE_BREAKPOINT = 768;
 

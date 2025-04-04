@@ -61,7 +61,7 @@ export function AppControls() {
                 <Dropdown
                     selectedId={activePreset}
                     groups={DROPDOWN_PRESETS}
-                    onSelect={activatePreset}
+                    onSelect={(preset) => activatePreset(preset.id)}
                 />
             </div>
         </>

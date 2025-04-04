@@ -6,46 +6,63 @@ import {useClickOutside} from "@common/hooks";
 import {Interpolation} from "@emotion/react";
 import {Theme} from "@emotion/react";
 
-export type DropdownGroup<T> = {
-    groupLabel?: string;
-    items: DropdownItem<T>[];
-};
-export type DropdownItem<T> = {
-    id: T;
+/**
+    Initially, the dropdown component had simpler typing. It worked, but
+    because of how typescript infer types, when you pass an array of dropdown
+    groups, it would only infer the `id` type for items in the first group.
+    Meaning `selectedId` & `onSelect` would only have types for the first group.
+    This typing also allows custom properties to be added to the items, which
+    also extends the DropdownItem type.
+*/
+
+export type DropdownItem = {
+    id: string;
     label: string;
     href?: string;
 };
 
-type Props<T> = {
-    groups: DropdownGroup<T>[];
+export type DropdownGroup<T extends DropdownItem = DropdownItem> = {
+    groupLabel?: string;
+    items: readonly T[];
+};
+
+// this ensures types are inferred correctly from the groups
+// even if there are multiple groups, each group's ids and item custom
+// properties, that are not native to the DropdownItem, are inferred correctly
+type InferDropdownItem<TGroups extends readonly DropdownGroup[]> =
+    TGroups[number]["items"][number];
+
+type DropdownProps<TGroups extends readonly DropdownGroup[]> = {
+    groups: TGroups;
     label: string;
-    selectedId?: T | null;
-    onSelect?: (id: T) => void;
+    selectedId?: InferDropdownItem<TGroups>["id"] | null;
+    onSelect?: (item: InferDropdownItem<TGroups>) => void;
     noSelectionLabel?: string;
     cssProp?: Interpolation<Theme>;
 };
 
-export function Dropdown<T extends string>({
+export function Dropdown<TGroups extends readonly DropdownGroup[]>({
     groups,
     onSelect,
     selectedId,
     noSelectionLabel = "None selected",
     label,
     cssProp,
-}: Props<T>) {
+}: DropdownProps<TGroups>) {
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useClickOutside(containerRef, () => setOpen(false));
 
-    const handleSelect = (id: T) => {
-        onSelect?.(id);
+    const handleSelect = (item: InferDropdownItem<TGroups>) => {
+        onSelect?.(item);
         setOpen(false);
     };
 
     const selectedItem = groups
         .flatMap((group) => group.items)
         .find((item) => item.id === selectedId);
+
     return (
         <div css={[styles.container, cssProp]} ref={containerRef}>
             <label css={styles.label} htmlFor={label}>
@@ -78,7 +95,7 @@ export function Dropdown<T extends string>({
                                     <li key={item.id}>
                                         <Button
                                             size="small"
-                                            onClick={() => handleSelect(item.id)}
+                                            onClick={() => handleSelect(item)}
                                             cssProp={styles.dropdownItem(
                                                 selectedId === item.id,
                                             )}

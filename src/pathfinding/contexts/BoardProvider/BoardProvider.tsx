@@ -27,6 +27,14 @@ type BoardContextType = {
     shouldAnimate: boolean;
     switchAlgorithm: (algorithmId: AlgorithmId) => void;
     currentAlgorithmId: AlgorithmId;
+    addObstaclePreset: (
+        obstacleGenerator: (
+            rows: number,
+            cols: number,
+            startTile: Tile,
+            endTile: Tile,
+        ) => number[][],
+    ) => void;
     stepCount: number;
     stepIndex: number;
     goToStep: (stepIndex: number) => void;
@@ -116,6 +124,22 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         [computeSteps],
     );
 
+    const resetGrid = useCallback(() => {
+        const middleRow = Math.floor(initialGrid.current.length / 2);
+        const rowCount = initialGrid.current.length;
+        const columnCount = initialGrid.current[0].length;
+        const startTile = initialGrid.current[middleRow][Math.floor(columnCount / 4)];
+        const endTile = initialGrid.current[middleRow][Math.floor((3 * columnCount) / 4)];
+        initialGrid.current = createGrid({
+            rowCount,
+            columnCount,
+            start: startTile,
+            end: endTile,
+        });
+
+        return {rowCount, columnCount, startTile, endTile};
+    }, []);
+
     const updateSingleTile = useCallback(
         (row: number, column: number, updater: (tile: Tile) => Tile) => {
             initialGrid.current = initialGrid.current.map((gridRow, rowIndex) =>
@@ -176,6 +200,30 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         [getEndTile, getStartTile, updateSingleTile],
     );
 
+    const addObstaclePreset: BoardContextType["addObstaclePreset"] = useCallback(
+        (obstacleGenerator) => {
+            const {rowCount, columnCount, startTile, endTile} = resetGrid();
+
+            const walls = new Set(
+                obstacleGenerator(rowCount, columnCount, startTile, endTile).map(
+                    (wall) => `${wall[0]}-${wall[1]}`,
+                ),
+            );
+
+            initialGrid.current = initialGrid.current.map((gridRow, rowIndex) =>
+                gridRow.map((tile, columnIndex) => {
+                    return walls.has(`${rowIndex}-${columnIndex}`)
+                        ? {...tile, isWall: true}
+                        : tile;
+                }),
+            );
+            setCurrentGrid(initialGrid.current);
+            reset();
+            computeSteps();
+        },
+        [resetGrid, computeSteps, reset],
+    );
+
     const toggleIsPlaying = useCallback(
         (playing: boolean) => {
             if (hasReachedEnd) reset();
@@ -205,6 +253,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         stepIndex,
         goToStep,
         stepCount: steps.length,
+        addObstaclePreset,
     };
 
     return <BoardContext.Provider value={value}>{children}</BoardContext.Provider>;

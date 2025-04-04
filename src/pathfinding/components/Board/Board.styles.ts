@@ -58,7 +58,7 @@ export const tile = (tile: Tile, shouldAnimate: boolean) => css`
     aspect-ratio: 1;
     display: grid;
     place-items: center;
-    border: 1px solid var(--grid-color);
+    border: ${!tile.isWall ? "1px solid var(--grid-color)" : "1px solid transparent"};
     background-color: ${getBackgroundColor(tile)};
     animation: ${shouldAnimate
         ? css`

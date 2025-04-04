@@ -2,10 +2,17 @@ import {Dropdown, Sidebar} from "@common/components";
 import {ALGORITHM_SELECTION} from "@pathfinding/constants/algorithmSelection";
 import {useBoard} from "@pathfinding/contexts";
 import * as styles from "./Sidebar.styles";
+import {OBSTACLE_SELECTION} from "@pathfinding/constants/obstacles";
 
 export function PathfindingSidebar() {
-    const {currentAlgorithmId, switchAlgorithm, stepIndex, stepCount, goToStep} =
-        useBoard();
+    const {
+        currentAlgorithmId,
+        switchAlgorithm,
+        addObstaclePreset,
+        stepIndex,
+        stepCount,
+        goToStep,
+    } = useBoard();
 
     return (
         <Sidebar>
@@ -27,7 +34,13 @@ export function PathfindingSidebar() {
                     label="Algorithm"
                     groups={[{items: ALGORITHM_SELECTION}]}
                     selectedId={currentAlgorithmId}
-                    onSelect={switchAlgorithm}
+                    onSelect={(algorithm) => switchAlgorithm(algorithm.id)}
+                />
+                <Dropdown
+                    label="Obstacles"
+                    noSelectionLabel="Select an obstacle"
+                    groups={OBSTACLE_SELECTION}
+                    onSelect={(obstacle) => addObstaclePreset(obstacle.generate)}
                 />
             </div>
         </Sidebar>

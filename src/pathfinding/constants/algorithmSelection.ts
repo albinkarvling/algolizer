@@ -1,7 +1,6 @@
 import {DropdownItem} from "@common/components";
-import {AlgorithmId} from "@pathfinding/algorithms/types";
 
-export const ALGORITHM_SELECTION: DropdownItem<AlgorithmId>[] = [
+export const ALGORITHM_SELECTION = [
     {
         id: "dijkstra",
         label: "Dijkstra's",
@@ -26,4 +25,4 @@ export const ALGORITHM_SELECTION: DropdownItem<AlgorithmId>[] = [
         id: "dfs",
         label: "Depth First Search",
     },
-];
+] as const satisfies DropdownItem[];

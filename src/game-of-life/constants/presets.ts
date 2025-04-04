@@ -2,7 +2,7 @@ import {DropdownGroup} from "@common/components";
 
 export type Preset = keyof typeof PRESET_GRIDS;
 
-export const DROPDOWN_PRESETS: DropdownGroup<keyof typeof PRESET_GRIDS>[] = [
+export const DROPDOWN_PRESETS = [
     {
         groupLabel: "Spaceships",
         items: [
@@ -24,7 +24,7 @@ export const DROPDOWN_PRESETS: DropdownGroup<keyof typeof PRESET_GRIDS>[] = [
         groupLabel: "Glider Guns",
         items: [{id: "gosper-glider-gun", label: "Gosper Glider Gun"}],
     },
-];
+] as const satisfies DropdownGroup[];
 
 export const PRESET_GRIDS = {
     glider: [
