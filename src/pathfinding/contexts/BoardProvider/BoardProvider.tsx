@@ -19,8 +19,6 @@ type BoardContextType = {
     setIsPlaying: (isPlaying: boolean) => void;
     goToPrevStep: () => void;
     goToNextStep: () => void;
-    setPlaybackSpeed: (speed: number) => void;
-    playbackSpeed: number;
     canStepBack: boolean;
     canStepForward: boolean;
     moveTile: (type: MoveTileType, row: number, column: number) => void;
@@ -50,10 +48,11 @@ export const useBoard = () => {
     return context;
 };
 
+const PLAYBACK_SPEED = 0;
+
 export function BoardProvider({children}: {children: React.ReactNode}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [preventGoToEnd, setPreventGoToEnd] = useState(true);
-    const [playbackSpeed, setPlaybackSpeed] = useState(10);
     const initialGrid = useRef<Grid>([]);
     const [currentGrid, setCurrentGrid] = useState<Grid>(initialGrid.current);
     const [steps, setSteps] = useState<Step[]>([]);
@@ -70,7 +69,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         goToEndStep,
         hasReachedEnd,
         goToStep,
-    } = useVisualizerController(steps, isPlaying, setIsPlaying, playbackSpeed);
+    } = useVisualizerController(steps, isPlaying, setIsPlaying, PLAYBACK_SPEED);
 
     useEffect(() => {
         if (!isPlaying && !preventGoToEnd) {
@@ -240,8 +239,6 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         isPlaying,
         setIsPlaying: toggleIsPlaying,
         shouldAnimate: preventGoToEnd,
-        setPlaybackSpeed,
-        playbackSpeed,
         goToPrevStep,
         goToNextStep,
         canStepBack,

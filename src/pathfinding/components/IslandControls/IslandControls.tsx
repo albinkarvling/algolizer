@@ -7,20 +7,21 @@ export function PathfindingIslandControls() {
         setIsPlaying,
         goToPrevStep,
         goToNextStep,
-        playbackSpeed,
-        setPlaybackSpeed,
+        goToStep,
+        stepIndex,
+        stepCount,
     } = useBoard();
 
     return (
         <IslandControls
             minPlaybackSpeed={0}
-            maxPlaybackSpeed={500}
+            maxPlaybackSpeed={stepCount}
+            playbackSpeed={stepIndex}
+            onSpeedChange={goToStep}
             onBackClick={goToPrevStep}
             onNextClick={goToNextStep}
-            onSpeedChange={setPlaybackSpeed}
             onPlayToggle={setIsPlaying}
             isPlaying={isPlaying}
-            playbackSpeed={playbackSpeed}
             shouldShow
         />
     );
