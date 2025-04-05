@@ -19,8 +19,8 @@ export const gameList = css`
 export const gameItem = css`
     display: grid;
     place-items: center;
-    width: 140px;
-    padding: 1.5rem;
+    width: 160px;
+    padding: 2rem;
     border-radius: 0.25rem;
     transition: background-color 0.2s;
     background-color: var(--background-accent-hover-sidebar);
