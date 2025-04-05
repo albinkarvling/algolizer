@@ -1,7 +1,7 @@
 import {memo, useRef} from "react";
 import * as styles from "./Board.styles";
-import {useBoard} from "@pathfinding/contexts";
-import {Tile} from "@pathfinding/types";
+import {useBoard, useBrush} from "@pathfinding/contexts";
+import {PaletteBrush, Tile} from "@pathfinding/types";
 import {AlgorithmId} from "@pathfinding/algorithms/types";
 import {useMouseControls, useResponsiveGrid} from "@pathfinding/hooks";
 import {Flag, Navigation} from "@mui/icons-material";
@@ -15,6 +15,7 @@ type TileProps = {
     onMouseEnter: () => void;
     shouldAnimate: boolean;
     algorithmId: AlgorithmId;
+    currentBrush: PaletteBrush;
 };
 
 const BoardTile = memo(
@@ -34,6 +35,7 @@ const BoardTile = memo(
             >
                 {tile.isStart && <Navigation sx={{rotate: "90deg"}} />}
                 {tile.isEnd && <Flag />}
+                {tile.weight && <span css={styles.weight}>{tile.weight}</span>}
             </div>
         );
     },
@@ -50,14 +52,17 @@ function areTilePropsEqual(prevProps: TileProps, nextProps: TileProps) {
         prevTile.isStart !== nextTile.isStart ||
         prevTile.isEnd !== nextTile.isEnd ||
         prevTile.isVisited !== nextTile.isVisited ||
+        prevTile.weight !== nextTile.weight ||
         prevTile.isPath !== nextTile.isPath;
 
     const algorithmChanged = prevProps.algorithmId !== nextProps.algorithmId;
+    const brushChanged = prevProps.currentBrush !== nextProps.currentBrush;
 
-    return !tileChanged && !algorithmChanged;
+    return !tileChanged && !algorithmChanged && !brushChanged;
 }
 
 export function Board() {
+    const {currentBrush} = useBrush();
     const {currentGrid, initializeGrid, shouldAnimate, currentAlgorithmId} = useBoard();
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -83,6 +88,7 @@ export function Board() {
                             onMouseEnter={() => onMouseEnter(tile)}
                             shouldAnimate={shouldAnimate}
                             algorithmId={currentAlgorithmId}
+                            currentBrush={currentBrush}
                             key={`${rowIndex}-${tileIndex}`}
                         />
                     ))}

@@ -9,6 +9,7 @@ type MoveTileType = "start" | "end";
 type BoardContextType = {
     currentGrid: Grid;
     toggleWall: (row: number, column: number) => void;
+    toggleWeight: (row: number, column: number, weight: number) => void;
     initializeGrid: (options: {
         rowCount: number;
         columnCount: number;
@@ -165,6 +166,16 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         [updateSingleTile],
     );
 
+    const toggleWeight = useCallback(
+        (row: number, column: number, weight: number) => {
+            updateSingleTile(row, column, (tile) => ({
+                ...tile,
+                weight: tile.weight !== weight ? weight : undefined,
+            }));
+        },
+        [updateSingleTile],
+    );
+
     const moveTile: BoardContextType["moveTile"] = useCallback(
         (type, row, column) => {
             const currentStartTile = getStartTile();
@@ -236,6 +247,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         currentGrid,
         initializeGrid,
         toggleWall,
+        toggleWeight,
         isPlaying,
         setIsPlaying: toggleIsPlaying,
         shouldAnimate: preventGoToEnd,

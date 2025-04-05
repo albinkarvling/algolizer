@@ -1,28 +1,38 @@
-import {DropdownItem} from "@common/components";
+import {DropdownGroup} from "@common/components";
 
 export const ALGORITHM_SELECTION = [
     {
-        id: "dijkstra",
-        label: "Dijkstra's",
+        groupLabel: "Supports Weights",
+        items: [
+            {
+                id: "dijkstra",
+                label: "Dijkstra's",
+            },
+            {
+                id: "astar",
+                label: "A* Search",
+            },
+        ],
     },
     {
-        id: "bfs",
-        label: "Breadth First Search",
+        groupLabel: "Non-weight Algorithms",
+        items: [
+            {
+                id: "bfs",
+                label: "Breadth First Search",
+            },
+            {
+                id: "gbfs",
+                label: "Greedy Best First Search",
+            },
+            {
+                id: "bidirectionalBfs",
+                label: "Bidirectional BFS",
+            },
+            {
+                id: "dfs",
+                label: "Depth First Search",
+            },
+        ],
     },
-    {
-        id: "astar",
-        label: "A* Search",
-    },
-    {
-        id: "gbfs",
-        label: "Greedy Best First Search",
-    },
-    {
-        id: "bidirectionalBfs",
-        label: "Bidirectional BFS",
-    },
-    {
-        id: "dfs",
-        label: "Depth First Search",
-    },
-] as const satisfies DropdownItem[];
+] as const satisfies DropdownGroup[];

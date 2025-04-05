@@ -1,4 +1,5 @@
 import {css, keyframes} from "@emotion/react";
+import {GRASS_WEIGHT, MUD_WEIGHT} from "@pathfinding/constants";
 import {Tile} from "@pathfinding/types";
 
 export const board = css`
@@ -45,6 +46,8 @@ const getBackgroundColor = (tile: Tile) => {
     if (tile.isWall) return "var(--tile-wall)";
     if (tile.isVisited) return "var(--tile-visited)";
     if (tile.isPath) return "var(--tile-path)";
+    if (tile.weight === GRASS_WEIGHT) return "var(--tile-grass)";
+    if (tile.weight === MUD_WEIGHT) return "var(--tile-mud)";
 };
 const getAnimation = (tile: Tile) => {
     if (tile.isEnd) return;
@@ -65,4 +68,16 @@ export const tile = (tile: Tile, shouldAnimate: boolean) => css`
               ${getAnimation(tile)} 1.5s
           `
         : undefined};
+`;
+
+export const weight = css`
+    position: relative;
+    pointer-events: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 0.875rem;
+    font-weight: bold;
 `;

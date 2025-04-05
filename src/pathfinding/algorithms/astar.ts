@@ -1,9 +1,11 @@
 import {Tile, Step} from "@pathfinding/types";
 
+// Manhattan distance heuristic
 function heuristic(a: Tile, b: Tile): number {
     return Math.abs(a.row - b.row) + Math.abs(a.column - b.column);
 }
 
+// Reconstructs the path from end -> start using previous pointers
 function reconstructPath(end: Tile): Step[] {
     const path: Step[] = [];
     let current: Tile | undefined = end;
@@ -14,19 +16,21 @@ function reconstructPath(end: Tile): Step[] {
     return path;
 }
 
+// Get valid neighbors (non-wall, in bounds)
 function getNeighbors(grid: Tile[][], tile: Tile): Tile[] {
     const {row, column} = tile;
     const neighbors: Tile[] = [];
-    const deltas = [
-        [-1, 0],
-        [1, 0],
-        [0, -1],
-        [0, 1], // up, down, left, right
+    const directions = [
+        [-1, 0], // up
+        [1, 0], // down
+        [0, -1], // left
+        [0, 1], // right
     ];
 
-    for (const [dRow, dCol] of deltas) {
+    for (const [dRow, dCol] of directions) {
         const newRow = row + dRow;
         const newCol = column + dCol;
+
         if (
             newRow >= 0 &&
             newRow < grid.length &&
@@ -45,50 +49,53 @@ export function astar(grid: Tile[][], start: Tile, end: Tile): Step[] {
     const visitedSet = new Set<string>();
     const visitedSteps: Step[] = [];
 
+    // Initialize tile states
+    for (const row of grid) {
+        for (const tile of row) {
+            tile.g = Infinity;
+            tile.f = Infinity;
+            tile.previous = undefined;
+        }
+    }
+
     start.g = 0;
     start.f = heuristic(start, end);
     openSet.push(start);
 
     while (openSet.length > 0) {
-        // Sort by f-score, tie-breaking with heuristic to favor directionality
-        openSet.sort((a, b) => {
-            const fA = a.f ?? Infinity;
-            const fB = b.f ?? Infinity;
-            if (fA !== fB) return fA - fB;
-
-            // Tie-break: prefer closer to goal
-            return heuristic(a, end) - heuristic(b, end);
-        });
-
+        // Sort by f value (lowest f = best candidate)
+        openSet.sort((a, b) => (a.f ?? Infinity) - (b.f ?? Infinity));
         const current = openSet.shift()!;
-        const currentKey = `${current.row}-${current.column}`;
+        const key = `${current.row}-${current.column}`;
 
-        if (visitedSet.has(currentKey)) continue;
-        visitedSet.add(currentKey);
+        if (visitedSet.has(key)) continue;
+        visitedSet.add(key);
 
         if (!current.isStart && !current.isEnd) {
             visitedSteps.push({row: current.row, column: current.column, type: "visit"});
         }
 
         if (current === end) {
-            const pathSteps = reconstructPath(current);
-            return [...visitedSteps, ...pathSteps];
+            const path = reconstructPath(current);
+            return [...visitedSteps, ...path];
         }
 
         const neighbors = getNeighbors(grid, current);
         for (const neighbor of neighbors) {
             if (neighbor.isWall) continue;
 
-            const tentativeG = (current.g ?? Infinity) + 1;
+            const weight = neighbor.weight ?? 1;
+            const tentativeG = (current.g ?? Infinity) + weight;
 
             if (tentativeG < (neighbor.g ?? Infinity)) {
                 neighbor.previous = current;
                 neighbor.g = tentativeG;
-                neighbor.f = neighbor.g + heuristic(neighbor, end) * 1.1; // weighted heuristic
+                neighbor.f = tentativeG + heuristic(neighbor, end) * 1.1; // Slightly greedy A*
                 openSet.push(neighbor);
             }
         }
     }
 
+    // No path found
     return visitedSteps;
 }

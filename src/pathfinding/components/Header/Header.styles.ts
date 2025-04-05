@@ -15,6 +15,9 @@ const tile = css`
     aspect-ratio: 1;
     border-radius: 0.25rem;
     border: 2px solid var(--background-accent-header);
+    display: grid;
+    place-items: center;
+    font-size: 0.875rem;
 `;
 
 export const unvisitedTile = css`
@@ -35,4 +38,18 @@ export const shortestPath = css`
 export const wallTile = css`
     ${tile}
     background-color: var(--tile-wall);
+`;
+
+export const grassTile = css`
+    ${tile}
+    background-color: var(--tile-grass);
+    color: var(--text-color);
+    font-weight: bold;
+`;
+
+export const mudTile = css`
+    ${tile}
+    background-color: var(--tile-mud);
+    color: var(--text-color);
+    font-weight: bold;
 `;

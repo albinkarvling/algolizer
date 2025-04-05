@@ -3,6 +3,7 @@ import {ALGORITHM_SELECTION} from "@pathfinding/constants/algorithmSelection";
 import {useBoard} from "@pathfinding/contexts";
 import * as styles from "./Sidebar.styles";
 import {OBSTACLE_SELECTION} from "@pathfinding/constants/obstacles";
+import {Palette} from "./Palette";
 
 export function PathfindingSidebar() {
     const {
@@ -30,9 +31,10 @@ export function PathfindingSidebar() {
                 />
             </div>
             <div css={styles.content}>
+                <Palette />
                 <Dropdown
                     label="Algorithm"
-                    groups={[{items: ALGORITHM_SELECTION}]}
+                    groups={ALGORITHM_SELECTION}
                     selectedId={currentAlgorithmId}
                     onSelect={(algorithm) => switchAlgorithm(algorithm.id)}
                 />

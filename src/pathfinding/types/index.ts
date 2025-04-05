@@ -7,6 +7,7 @@ export type Tile = {
     isVisited: boolean;
     isPath: boolean;
     distance: number;
+    weight?: number;
     g?: number;
     f?: number;
     previous?: Tile;
@@ -20,3 +21,5 @@ export type Step = Pick<Tile, "row" | "column"> & {
 };
 
 export type Grid = Tile[][];
+
+export type PaletteBrush = "wall" | "grass" | "mud";

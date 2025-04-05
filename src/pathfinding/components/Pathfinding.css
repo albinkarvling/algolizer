@@ -8,4 +8,6 @@
     --tile-visited-transition: #d800f5;
     --tile-path: #ff0;
     --tile-border: #ccc;
+    --tile-grass: #8fbc8f;
+    --tile-mud: #8b4513;
 }

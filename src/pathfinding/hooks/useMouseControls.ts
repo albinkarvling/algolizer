@@ -1,12 +1,14 @@
-import {useBoard} from "@pathfinding/contexts";
+import {GRASS_WEIGHT, MUD_WEIGHT} from "@pathfinding/constants";
+import {useBoard, useBrush} from "@pathfinding/contexts";
 import {Tile} from "@pathfinding/types";
 import {useCallback, useEffect, useRef} from "react";
 
-type TileDragType = "start" | "end" | "wall";
-type MouseTile = Pick<Tile, "row" | "column" | "isWall" | "isStart" | "isEnd">;
+type TileDragType = "start" | "end" | "paint";
+type MouseTile = Pick<Tile, "row" | "column" | "isWall" | "weight" | "isStart" | "isEnd">;
 
 export function useMouseControls(containerRef: React.RefObject<HTMLDivElement | null>) {
-    const {moveTile, toggleWall} = useBoard();
+    const {currentBrush} = useBrush();
+    const {moveTile, toggleWall, toggleWeight} = useBoard();
 
     const isDragging = useRef<false | TileDragType>(false);
     const updatedTiles = useRef<Set<string>>(new Set());
@@ -27,15 +29,26 @@ export function useMouseControls(containerRef: React.RefObject<HTMLDivElement | 
                 case "end":
                     moveTile("end", tile.row, tile.column);
                     break;
-                case "wall":
+                case "paint":
                     if (!updatedTiles.current.has(key)) {
                         updatedTiles.current.add(key);
-                        toggleWall(tile.row, tile.column);
+
+                        switch (currentBrush) {
+                            case "wall":
+                                toggleWall(tile.row, tile.column);
+                                break;
+                            case "grass":
+                                toggleWeight(tile.row, tile.column, GRASS_WEIGHT);
+                                break;
+                            case "mud":
+                                toggleWeight(tile.row, tile.column, MUD_WEIGHT);
+                                break;
+                        }
                     }
                     break;
             }
         },
-        [moveTile, toggleWall],
+        [moveTile, toggleWall, toggleWeight, currentBrush],
     );
 
     const startDrag = (tile: MouseTile) => {
@@ -44,7 +57,7 @@ export function useMouseControls(containerRef: React.RefObject<HTMLDivElement | 
         } else if (tile.isEnd) {
             isDragging.current = "end";
         } else {
-            isDragging.current = "wall";
+            isDragging.current = "paint";
             applyTileEffect(tile);
         }
     };

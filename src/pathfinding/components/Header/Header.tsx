@@ -1,6 +1,7 @@
 import {Header} from "@common/components";
 import {Flag, Navigation} from "@mui/icons-material";
 import * as styles from "./Header.styles";
+import {GRASS_WEIGHT, MUD_WEIGHT} from "@pathfinding/constants";
 
 export function PathfindingHeader() {
     return (
@@ -28,6 +29,14 @@ export function PathfindingHeader() {
             <div css={styles.row}>
                 <div css={styles.wallTile}></div>
                 <span>Wall Tile</span>
+            </div>
+            <div css={styles.row}>
+                <div css={styles.grassTile}>{GRASS_WEIGHT}</div>
+                <span>Grass Tile</span>
+            </div>
+            <div css={styles.row}>
+                <div css={styles.mudTile}>{MUD_WEIGHT}</div>
+                <span>Mud Tile</span>
             </div>
         </Header>
     );
