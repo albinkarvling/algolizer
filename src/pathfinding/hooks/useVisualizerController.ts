@@ -1,3 +1,4 @@
+import {useSyncedRef} from "@common/hooks";
 import {Step} from "@pathfinding/types";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 
@@ -8,12 +9,9 @@ export function useVisualizerController(
     playbackSpeed: number,
 ) {
     const [stepIndex, setStepIndex] = useState(0);
-    const stepCount = useRef(steps.length);
+    const currentStepIndex = useSyncedRef(stepIndex);
+    const currentStepCount = useSyncedRef(steps.length);
     const intervalRef = useRef<number | undefined>(undefined);
-
-    useEffect(() => {
-        stepCount.current = steps.length;
-    }, [steps.length]);
 
     const goToNextStep = useCallback(
         (isAutoPlay?: boolean) => {
@@ -52,10 +50,14 @@ export function useVisualizerController(
     }, [goToNextStep, isPlaying, playbackSpeed, hasReachedEnd, setIsPlaying]);
 
     const reset = useCallback(() => setStepIndex(0), []);
-    const goToEndStep = useCallback(() => setStepIndex(stepCount.current), []);
+    const goToEndStep = useCallback(
+        () => setStepIndex(currentStepCount.current),
+        [currentStepCount],
+    );
     const goToStep = useCallback((index: number) => setStepIndex(index), []);
 
     return {
+        currentStepIndex,
         stepIndex,
         goToNextStep,
         goToPrevStep,

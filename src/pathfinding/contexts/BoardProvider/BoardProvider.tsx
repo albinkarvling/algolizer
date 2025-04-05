@@ -70,6 +70,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         hasReachedEnd,
         reset,
         goToStep,
+        currentStepIndex,
     } = useVisualizerController(steps, isPlaying, setIsPlaying, PLAYBACK_SPEED);
 
     const getStartTile = useCallback(
@@ -96,12 +97,12 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
             initialGrid.current[row][col] = updater(initialGrid.current[row][col]);
             computeSteps();
             setIsPlaying(false);
-            if (stepIndex !== 0) {
+            if (currentStepIndex.current !== 0) {
                 setPreventGoToEnd(false);
                 goToEndStep();
             }
         },
-        [computeSteps, stepIndex, goToEndStep],
+        [computeSteps, currentStepIndex, goToEndStep],
     );
 
     const updateGridWithSteps = useCallback(() => {
