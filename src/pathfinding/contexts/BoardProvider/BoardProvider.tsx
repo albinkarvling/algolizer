@@ -5,6 +5,8 @@ import {Grid, Step, Tile} from "@pathfinding/types";
 import {createGrid} from "@pathfinding/utils";
 import {createContext, useCallback, useContext, useEffect, useRef, useState} from "react";
 
+const PLAYBACK_SPEED = 0;
+
 type MoveTileType = "start" | "end";
 type BoardContextType = {
     currentGrid: Grid;
@@ -37,26 +39,24 @@ type BoardContextType = {
     stepCount: number;
     stepIndex: number;
     goToStep: (stepIndex: number) => void;
+    removeWeights: () => void;
+    resetGrid: () => void;
 };
 
 const BoardContext = createContext<null | BoardContextType>(null);
 
-export const useBoard = () => {
+export function useBoard() {
     const context = useContext(BoardContext);
-    if (context === null) {
-        throw new Error("useBoard must be used within a BoardProvider");
-    }
+    if (!context) throw new Error("useBoard must be used within a BoardProvider");
     return context;
-};
-
-const PLAYBACK_SPEED = 0;
+}
 
 export function BoardProvider({children}: {children: React.ReactNode}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [preventGoToEnd, setPreventGoToEnd] = useState(true);
+    const [steps, setSteps] = useState<Step[]>([]);
     const initialGrid = useRef<Grid>([]);
     const [currentGrid, setCurrentGrid] = useState<Grid>(initialGrid.current);
-    const [steps, setSteps] = useState<Step[]>([]);
 
     const {currentAlgorithm, switchAlgorithm} = useAlgorithmSelection();
 
@@ -65,90 +65,33 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         canStepForward,
         goToNextStep,
         goToPrevStep,
-        reset,
         stepIndex,
         goToEndStep,
         hasReachedEnd,
+        reset,
         goToStep,
     } = useVisualizerController(steps, isPlaying, setIsPlaying, PLAYBACK_SPEED);
 
-    useEffect(() => {
-        if (!isPlaying && !preventGoToEnd) {
-            goToEndStep();
-        }
-    }, [goToEndStep, steps.length, preventGoToEnd, isPlaying]);
-
-    useEffect(() => {
-        const stepMap = new Map(
-            steps.slice(0, stepIndex).map((step) => [`${step.row}-${step.column}`, step]),
-        );
-        setCurrentGrid(
-            initialGrid.current.map((gridRow) =>
-                gridRow.map((tile) => {
-                    const step = stepMap.get(`${tile.row}-${tile.column}`);
-                    if (!step) return tile;
-
-                    return {
-                        ...tile,
-                        isVisited: step.type === "visit",
-                        isPath: step.type === "path",
-                    };
-                }),
-            ),
-        );
-    }, [steps, stepIndex]);
-
-    const getStartTile = useCallback((grid?: Grid) => {
-        return (grid ?? initialGrid.current).flat().find((tile) => tile.isStart);
-    }, []);
-    const getEndTile = useCallback((grid?: Grid) => {
-        return (grid ?? initialGrid.current).flat().find((tile) => tile.isEnd);
-    }, []);
-
-    const computeSteps = useCallback(() => {
-        const algorithmGrid = structuredClone(initialGrid.current);
-        const startTile = getStartTile(algorithmGrid);
-        const endTile = getEndTile(algorithmGrid);
-        if (!startTile || !endTile) return;
-
-        const path = currentAlgorithm.algorithmFn(algorithmGrid, startTile, endTile);
-        setSteps(path);
-    }, [currentAlgorithm, getStartTile, getEndTile]);
-
-    const initializeGrid: BoardContextType["initializeGrid"] = useCallback(
-        ({rowCount, columnCount, start, end}) => {
-            const grid = createGrid({rowCount, columnCount, start, end});
-            initialGrid.current = grid;
-            computeSteps();
-        },
-        [computeSteps],
+    const getStartTile = useCallback(
+        (grid: Grid = initialGrid.current) => grid.flat().find((t) => t.isStart),
+        [],
     );
 
-    const resetGrid = useCallback(() => {
-        const middleRow = Math.floor(initialGrid.current.length / 2);
-        const rowCount = initialGrid.current.length;
-        const columnCount = initialGrid.current[0].length;
-        const startTile = initialGrid.current[middleRow][Math.floor(columnCount / 4)];
-        const endTile = initialGrid.current[middleRow][Math.floor((3 * columnCount) / 4)];
-        initialGrid.current = createGrid({
-            rowCount,
-            columnCount,
-            start: startTile,
-            end: endTile,
-        });
+    const getEndTile = useCallback(
+        (grid: Grid = initialGrid.current) => grid.flat().find((t) => t.isEnd),
+        [],
+    );
 
-        return {rowCount, columnCount, startTile, endTile};
-    }, []);
+    const computeSteps = useCallback(() => {
+        const gridCopy = structuredClone(initialGrid.current);
+        const start = getStartTile(gridCopy);
+        const end = getEndTile(gridCopy);
+        if (start && end) setSteps(currentAlgorithm.algorithmFn(gridCopy, start, end));
+    }, [currentAlgorithm, getStartTile, getEndTile]);
 
     const updateSingleTile = useCallback(
-        (row: number, column: number, updater: (tile: Tile) => Tile) => {
-            initialGrid.current = initialGrid.current.map((gridRow, rowIndex) =>
-                rowIndex === row
-                    ? gridRow.map((tile, columnIndex) =>
-                          columnIndex === column ? updater(tile) : tile,
-                      )
-                    : gridRow,
-            );
+        (row: number, col: number, updater: (tile: Tile) => Tile) => {
+            initialGrid.current[row][col] = updater(initialGrid.current[row][col]);
             computeSteps();
             setIsPlaying(false);
             if (stepIndex !== 0) {
@@ -159,16 +102,46 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         [computeSteps, stepIndex, goToEndStep],
     );
 
+    const updateGridWithSteps = useCallback(() => {
+        const stepMap = new Map(
+            steps.slice(0, stepIndex).map((s) => [`${s.row}-${s.column}`, s]),
+        );
+        setCurrentGrid(
+            initialGrid.current.map((row) =>
+                row.map((tile) => {
+                    const step = stepMap.get(`${tile.row}-${tile.column}`);
+                    return step
+                        ? {
+                              ...tile,
+                              isVisited: step.type === "visit",
+                              isPath: step.type === "path",
+                          }
+                        : tile;
+                }),
+            ),
+        );
+    }, [steps, stepIndex]);
+
+    useEffect(() => {
+        if (!isPlaying && !preventGoToEnd) goToEndStep();
+    }, [goToEndStep, steps.length, preventGoToEnd, isPlaying]);
+
+    useEffect(updateGridWithSteps, [updateGridWithSteps]);
+
     const toggleWall = useCallback(
-        (row: number, column: number) => {
-            updateSingleTile(row, column, (tile) => ({...tile, isWall: !tile.isWall}));
+        (row: number, col: number) => {
+            const currentTile = initialGrid.current[row][col];
+            if (currentTile.isStart || currentTile.isEnd) return;
+            updateSingleTile(row, col, (tile) => ({...tile, isWall: !tile.isWall}));
         },
         [updateSingleTile],
     );
 
     const toggleWeight = useCallback(
-        (row: number, column: number, weight: number) => {
-            updateSingleTile(row, column, (tile) => ({
+        (row: number, col: number, weight: number) => {
+            const currentTile = initialGrid.current[row][col];
+            if (currentTile.isStart || currentTile.isEnd) return;
+            updateSingleTile(row, col, (tile) => ({
                 ...tile,
                 weight: tile.weight !== weight ? weight : undefined,
             }));
@@ -192,7 +165,11 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
                             isStart: false,
                         }),
                     );
-                    updateSingleTile(row, column, (tile) => ({...tile, isStart: true}));
+                    updateSingleTile(row, column, (tile) => ({
+                        ...tile,
+                        isStart: true,
+                        isWall: false,
+                    }));
                     break;
                 case "end":
                     updateSingleTile(
@@ -203,36 +180,74 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
                             isEnd: false,
                         }),
                     );
-                    updateSingleTile(row, column, (tile) => ({...tile, isEnd: true}));
+                    updateSingleTile(row, column, (tile) => ({
+                        ...tile,
+                        isEnd: true,
+                        isWall: false,
+                    }));
                     break;
             }
         },
         [getEndTile, getStartTile, updateSingleTile],
     );
 
-    const addObstaclePreset: BoardContextType["addObstaclePreset"] = useCallback(
-        (obstacleGenerator) => {
-            const {rowCount, columnCount, startTile, endTile} = resetGrid();
+    const initializeGrid: BoardContextType["initializeGrid"] = useCallback(
+        ({rowCount, columnCount, start, end}) => {
+            if (!initialGrid.current.length) {
+                initialGrid.current = createGrid({rowCount, columnCount, start, end});
+            }
+            reset();
+            setIsPlaying(false);
+            computeSteps();
+        },
+        [computeSteps, reset],
+    );
 
-            const walls = new Set(
-                obstacleGenerator(rowCount, columnCount, startTile, endTile).map(
-                    (wall) => `${wall[0]}-${wall[1]}`,
+    const createCleanGrid = useCallback(() => {
+        const rowCount = initialGrid.current.length;
+        const colCount = initialGrid.current[0].length;
+        const midRow = Math.floor(rowCount / 2);
+        const start = initialGrid.current[midRow][Math.floor(colCount / 4)];
+        const end = initialGrid.current[midRow][Math.floor((3 * colCount) / 4)];
+        initialGrid.current = createGrid({rowCount, columnCount: colCount, start, end});
+        return {rowCount, columnCount: colCount, startTile: start, endTile: end};
+    }, []);
+
+    const resetGrid = useCallback(() => {
+        createCleanGrid();
+        setCurrentGrid(initialGrid.current);
+        computeSteps();
+        reset();
+        setIsPlaying(false);
+    }, [createCleanGrid, reset, computeSteps]);
+
+    const addObstaclePreset: BoardContextType["addObstaclePreset"] = useCallback(
+        (generator) => {
+            const {rowCount, columnCount, startTile, endTile} = createCleanGrid();
+            const wallSet = new Set(
+                generator(rowCount, columnCount, startTile, endTile).map(
+                    ([r, c]) => `${r}-${c}`,
                 ),
             );
-
-            initialGrid.current = initialGrid.current.map((gridRow, rowIndex) =>
-                gridRow.map((tile, columnIndex) => {
-                    return walls.has(`${rowIndex}-${columnIndex}`)
-                        ? {...tile, isWall: true}
-                        : tile;
-                }),
+            initialGrid.current = initialGrid.current.map((row, rIdx) =>
+                row.map((tile, cIdx) =>
+                    wallSet.has(`${rIdx}-${cIdx}`) ? {...tile, isWall: true} : tile,
+                ),
             );
             setCurrentGrid(initialGrid.current);
             reset();
+            setIsPlaying(false);
             computeSteps();
         },
-        [resetGrid, computeSteps, reset],
+        [createCleanGrid, computeSteps, reset],
     );
+
+    const removeWeights = useCallback(() => {
+        initialGrid.current = initialGrid.current.map((row) =>
+            row.map((tile) => ({...tile, weight: undefined})),
+        );
+        setCurrentGrid(initialGrid.current);
+    }, []);
 
     const toggleIsPlaying = useCallback(
         (playing: boolean) => {
@@ -257,12 +272,13 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         canStepForward,
         moveTile,
         currentAlgorithmId: currentAlgorithm.id,
-        currentAlgorithm,
         switchAlgorithm,
         stepIndex,
         goToStep,
+        removeWeights,
         stepCount: steps.length,
         addObstaclePreset,
+        resetGrid,
     };
 
     return <BoardContext.Provider value={value}>{children}</BoardContext.Provider>;

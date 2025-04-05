@@ -62,3 +62,14 @@ export const paletteItem = (
 export const paletteIcon = css`
     font-size: 1.25rem;
 `;
+
+export const footer = css`
+    flex: 1;
+    display: flex;
+    align-items: end;
+    padding: var(--main-padding);
+`;
+
+export const footerButton = css`
+    width: 100%;
+`;

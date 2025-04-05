@@ -18,7 +18,7 @@ export const useBrush = () => {
 };
 
 export function BrushProvider({children}: {children: React.ReactNode}) {
-    const {currentAlgorithmId} = useBoard();
+    const {currentAlgorithmId, removeWeights} = useBoard();
     const [currentBrush, setCurrentBrush] = useState<PaletteBrush>("wall");
 
     const weightsAreDisabled = useMemo(
@@ -29,8 +29,9 @@ export function BrushProvider({children}: {children: React.ReactNode}) {
     useEffect(() => {
         if (weightsAreDisabled) {
             setCurrentBrush("wall");
+            removeWeights();
         }
-    }, [weightsAreDisabled]);
+    }, [weightsAreDisabled, removeWeights]);
 
     const value = {
         currentBrush,

@@ -1,9 +1,10 @@
-import {Dropdown, Sidebar} from "@common/components";
+import {Button, Dropdown, Sidebar} from "@common/components";
 import {ALGORITHM_SELECTION} from "@pathfinding/constants/algorithmSelection";
 import {useBoard} from "@pathfinding/contexts";
 import * as styles from "./Sidebar.styles";
 import {OBSTACLE_SELECTION} from "@pathfinding/constants/obstacles";
 import {Palette} from "./Palette";
+import {RestartAlt} from "@mui/icons-material";
 
 export function PathfindingSidebar() {
     const {
@@ -13,6 +14,7 @@ export function PathfindingSidebar() {
         stepIndex,
         stepCount,
         goToStep,
+        resetGrid,
     } = useBoard();
 
     return (
@@ -44,6 +46,12 @@ export function PathfindingSidebar() {
                     groups={OBSTACLE_SELECTION}
                     onSelect={(obstacle) => addObstaclePreset(obstacle.generate)}
                 />
+            </div>
+            <div css={styles.footer}>
+                <Button cssProp={styles.footerButton} onClick={resetGrid}>
+                    <RestartAlt />
+                    Reset board
+                </Button>
             </div>
         </Sidebar>
     );
