@@ -43,7 +43,7 @@ const pathKeyframes = keyframes`
 `;
 
 const getBackgroundColor = (tile: Tile) => {
-    if (tile.isWall) return "var(--tile-wall)";
+    if (tile.isWall && !(tile.isStart || tile.isEnd)) return "var(--tile-wall)";
     if (tile.isVisited) return "var(--tile-visited)";
     if (tile.isPath) return "var(--tile-path)";
     if (tile.weight === GRASS_WEIGHT) return "var(--tile-grass)";

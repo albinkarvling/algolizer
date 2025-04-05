@@ -147,6 +147,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
             updateSingleTile(row, col, (tile) => ({
                 ...tile,
                 weight: tile.weight !== weight ? weight : undefined,
+                isWall: false,
             }));
         },
         [updateSingleTile],
@@ -168,11 +169,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
                             isStart: false,
                         }),
                     );
-                    updateSingleTile(row, column, (tile) => ({
-                        ...tile,
-                        isStart: true,
-                        isWall: false,
-                    }));
+                    updateSingleTile(row, column, (tile) => ({...tile, isStart: true}));
                     break;
                 case "end":
                     updateSingleTile(
@@ -183,11 +180,7 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
                             isEnd: false,
                         }),
                     );
-                    updateSingleTile(row, column, (tile) => ({
-                        ...tile,
-                        isEnd: true,
-                        isWall: false,
-                    }));
+                    updateSingleTile(row, column, (tile) => ({...tile, isEnd: true}));
                     break;
             }
         },

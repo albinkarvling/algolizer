@@ -3,7 +3,20 @@ import {PaletteBrush} from "@pathfinding/types";
 import * as styles from "./Sidebar.styles";
 import {Check} from "@mui/icons-material";
 
-const PALETTE_OPTIONS = ["wall", "grass", "mud"] as const;
+const PALETTE_OPTIONS = [
+    {
+        type: "wall",
+        label: "Wall",
+    },
+    {
+        type: "grass",
+        label: "Grass",
+    },
+    {
+        type: "mud",
+        label: "Mud",
+    },
+] as const;
 
 export function Palette() {
     const {currentBrush, setCurrentBrush, weightsAreDisabled} = useBrush();
@@ -16,28 +29,29 @@ export function Palette() {
                 Palette
             </label>
             <div id="palette" role="radiogroup" css={styles.paletteContainer}>
-                {PALETTE_OPTIONS.map((option) => {
-                    const isActive = currentBrush === option;
-                    const disabled = weightsAreDisabled && option !== "wall";
+                {PALETTE_OPTIONS.map(({label, type}) => {
+                    const isActive = currentBrush === type;
+                    const disabled = weightsAreDisabled && type !== "wall";
                     return (
                         <div
+                            data-tooltip={label}
                             onClick={() => {
                                 if (disabled) return;
-                                handleChange(option);
+                                handleChange(type);
                             }}
-                            css={styles.paletteItem(option, isActive, disabled)}
-                            key={option}
+                            css={styles.paletteItem(type, isActive, disabled)}
+                            key={type}
                         >
                             {isActive && <Check css={styles.paletteIcon} />}
                             <input
                                 type="radio"
-                                id={option}
+                                id={type}
                                 name="palette"
-                                value={option}
+                                value={type}
                                 checked={isActive}
-                                onChange={() => handleChange(option)}
+                                onChange={() => handleChange(type)}
                                 disabled={disabled}
-                                key={option}
+                                key={type}
                             />
                         </div>
                     );
