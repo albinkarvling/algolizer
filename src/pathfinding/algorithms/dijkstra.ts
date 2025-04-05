@@ -1,11 +1,10 @@
-import {Grid, Step, Tile} from "@pathfinding/types";
+import {Tile, Step, Grid} from "@pathfinding/types";
 import {getNeighbors} from "@pathfinding/utils";
 
 export function dijkstra(grid: Grid, start: Tile, end: Tile): Step[] {
     const steps: Step[] = [];
-    const visited = new Set<string>();
 
-    // 1. Initialize all distances and previous tiles
+    // Initialize
     for (const row of grid) {
         for (const tile of row) {
             tile.distance = Infinity;
@@ -14,49 +13,53 @@ export function dijkstra(grid: Grid, start: Tile, end: Tile): Step[] {
     }
 
     start.distance = 0;
-    const unvisited: Tile[] = grid.flat();
+    const unvisited = grid.flat();
+    const visited = new Set<string>();
 
-    // 2. Dijkstra core loop
+    const tileKey = (t: Tile) => `${t.row}-${t.column}`;
+
     while (unvisited.length > 0) {
-        // Sort tiles by shortest distance and pick the nearest
         unvisited.sort((a, b) => a.distance - b.distance);
         const current = unvisited.shift()!;
+        const key = tileKey(current);
 
-        if (current.isWall) continue;
+        // 🛑 Stop when remaining tiles are not reachable
+        if (current.distance === Infinity) break;
 
-        const key = `${current.row}-${current.column}`;
         if (visited.has(key)) continue;
         visited.add(key);
 
-        // Record step
+        if (current.isWall && !current.isEnd) continue;
+
         if (!current.isStart && !current.isEnd) {
             steps.push({row: current.row, column: current.column, type: "visit"});
         }
 
-        if (current === end) break;
+        if (current.row === end.row && current.column === end.column) break;
 
-        for (const neighbor of getNeighbors(current, grid)) {
-            if (neighbor.isWall) continue;
-            if (visited.has(`${neighbor.row}-${neighbor.column}`)) continue;
+        const neighbors = getNeighbors(current, grid);
+        for (const neighbor of neighbors) {
+            if (neighbor.isWall && !neighbor.isEnd) continue;
 
-            // Use weighted cost
+            const neighborKey = tileKey(neighbor);
+            if (visited.has(neighborKey)) continue;
+
             const weight = neighbor.weight ?? 1;
-            const newDist = current.distance + weight;
+            const newDistance = current.distance + weight;
 
-            if (newDist < neighbor.distance) {
-                neighbor.distance = newDist;
+            if (newDistance < neighbor.distance) {
+                neighbor.distance = newDistance;
                 neighbor.previous = current;
             }
         }
     }
 
-    // 3. Backtrack to build path
-    let curr: Tile | undefined = end;
-    const pathSteps: Step[] = [];
-    while (curr?.previous) {
-        pathSteps.unshift({row: curr.row, column: curr.column, type: "path"});
+    // Reconstruct path
+    let curr: Tile | undefined = grid[end.row][end.column];
+    while (curr && (curr.row !== start.row || curr.column !== start.column)) {
+        steps.push({row: curr.row, column: curr.column, type: "path"});
         curr = curr.previous;
     }
 
-    return [...steps, ...pathSteps];
+    return steps;
 }

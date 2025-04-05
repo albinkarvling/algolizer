@@ -189,7 +189,11 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
 
     const initializeGrid: BoardContextType["initializeGrid"] = useCallback(
         ({rowCount, columnCount, start, end}) => {
-            if (!initialGrid.current.length) {
+            if (
+                !initialGrid.current.length ||
+                initialGrid.current.length !== rowCount ||
+                initialGrid.current[0].length !== columnCount
+            ) {
                 initialGrid.current = createGrid({rowCount, columnCount, start, end});
             }
             reset();

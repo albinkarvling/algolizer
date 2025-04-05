@@ -9,6 +9,7 @@ const CELL_SIZE_WITH_BORDER = CELL_SIZE + BORDER_SIZE;
 
 export function Board() {
     const {grid, setupGrid, toggleCellState} = useBoard();
+    const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const isDragging = useRef(false);
     const lastUpdatedCells = useRef<Set<string>>(new Set());
@@ -29,8 +30,10 @@ export function Board() {
         };
         onResize();
 
-        window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
+        const resizeObserver = new ResizeObserver(onResize);
+
+        resizeObserver.observe(containerRef.current!);
+        return () => resizeObserver.disconnect();
     }, [setupGrid]);
 
     const getCSSVariable = useCallback(
@@ -164,7 +167,7 @@ export function Board() {
     }, [handleMouseDown, handleMouseMove, handleMouseUp]);
 
     return (
-        <div css={styles.board}>
+        <div css={styles.board} ref={containerRef}>
             <canvas
                 ref={canvasRef}
                 style={{display: "block", width: "100%", height: "100%"}}

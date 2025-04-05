@@ -5,9 +5,9 @@ import {Tile} from "@pathfinding/types";
 export const board = css`
     flex: 1;
     overflow: hidden;
-    max-width: calc(100dvw - var(--width-main-sidebar));
-    height: calc(100% - var(--height-header));
+    height: calc(100dvh - var(--height-header));
     touch-action: none;
+    width: 100%;
 `;
 
 export const row = css`
