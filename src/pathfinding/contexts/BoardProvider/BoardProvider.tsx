@@ -86,7 +86,9 @@ export function BoardProvider({children}: {children: React.ReactNode}) {
         const gridCopy = structuredClone(initialGrid.current);
         const start = getStartTile(gridCopy);
         const end = getEndTile(gridCopy);
-        if (start && end) setSteps(currentAlgorithm.algorithmFn(gridCopy, start, end));
+        if (start && end) {
+            setSteps(currentAlgorithm.algorithmFn(gridCopy, start, end));
+        }
     }, [currentAlgorithm, getStartTile, getEndTile]);
 
     const updateSingleTile = useCallback(
