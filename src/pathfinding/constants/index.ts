@@ -54,6 +54,7 @@ export const PATH_FINDING_TUTORIAL_STEPS: TutorialStep[] = [
         header: "Reset Board",
         description:
             "The reset board button will reset the board to its original state. This will remove all tiles and obstacles.",
+        showSidebar: true,
     },
     {
         id: "tutorial-button",

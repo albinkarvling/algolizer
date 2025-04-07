@@ -6,10 +6,12 @@ import {History} from "./History";
 import {Sidebar, Button} from "@shared/components";
 import {useBoard, useSidebarState} from "@game-of-life/contexts";
 import {SIDEBAR_STATES} from "@game-of-life/constants";
+import {useTutorial} from "@shared/contexts";
 
 export function GameOfLifeSidebar() {
     const {resetGrid} = useBoard();
     const {state} = useSidebarState();
+    const {resetTutorial} = useTutorial();
 
     let sidebarContent: JSX.Element | null = null;
     switch (state) {
@@ -37,6 +39,7 @@ export function GameOfLifeSidebar() {
                     Reset board
                 </Button>
                 <Button
+                    onClick={resetTutorial}
                     buttonProps={{
                         "data-tutorial-id": "tutorial-button",
                         "data-tooltip": "Show tutorial",
