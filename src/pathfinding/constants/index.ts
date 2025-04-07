@@ -23,6 +23,12 @@ export const PATH_FINDING_TUTORIAL_STEPS: TutorialStep[] = [
             "The board is where you will visualize the pathfinding algorithm. You can click and drag on the tiles to change their state.",
     },
     {
+        id: "island-controls",
+        header: "Playback Controls",
+        description:
+            "Use the playback controls to start, pause, go back and forward through the steps of the algorithm.",
+    },
+    {
         id: "palette",
         header: "The Palette",
         description:
@@ -42,12 +48,6 @@ export const PATH_FINDING_TUTORIAL_STEPS: TutorialStep[] = [
         description:
             "The obstacle selector provides you with a list of preset obstacles you can place on the board.",
         showSidebar: true,
-    },
-    {
-        id: "island-controls",
-        header: "Playback Controls",
-        description:
-            "Use the playback controls to start, pause, go back and forward through the steps of the algorithm.",
     },
     {
         id: "reset-board-button",

@@ -4,3 +4,4 @@ export * from "./Button";
 export * from "./Dropdown";
 export * from "./IslandControls";
 export * from "./Tutorial";
+export * from "./Label";

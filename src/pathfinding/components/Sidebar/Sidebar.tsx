@@ -9,31 +9,11 @@ import {useTutorial} from "@common/contexts/TutorialProvider";
 
 export function PathfindingSidebar() {
     const {resetTutorial} = useTutorial();
-    const {
-        currentAlgorithmId,
-        switchAlgorithm,
-        addObstaclePreset,
-        stepIndex,
-        stepCount,
-        goToStep,
-        resetGrid,
-    } = useBoard();
+    const {currentAlgorithmId, switchAlgorithm, addObstaclePreset, resetGrid} =
+        useBoard();
 
     return (
         <Sidebar>
-            <div css={[styles.content, styles.playbackTimeline]}>
-                <label htmlFor="playback-timeline" css={styles.label}>
-                    Playback Timeline
-                </label>
-                <input
-                    id="playback-timeline"
-                    type="range"
-                    min={0}
-                    max={stepCount}
-                    value={stepIndex}
-                    onChange={(e) => goToStep(Number(e.target.value))}
-                />
-            </div>
             <div css={styles.content}>
                 <Palette />
                 <Dropdown

@@ -5,6 +5,7 @@ import {ArrowForwardIos} from "@mui/icons-material";
 import {useClickOutside} from "@common/hooks";
 import {Interpolation} from "@emotion/react";
 import {Theme} from "@emotion/react";
+import {Label} from "../Label";
 
 /**
     Initially, the dropdown component had simpler typing. It worked, but
@@ -69,9 +70,7 @@ export function Dropdown<TGroups extends readonly DropdownGroup[]>({
 
     return (
         <div css={[styles.container, cssProp]} ref={containerRef} {...dropdownProps}>
-            <label css={styles.label} htmlFor={label}>
-                {label}
-            </label>
+            <Label htmlFor={label}>{label}</Label>
 
             <button
                 id={label}

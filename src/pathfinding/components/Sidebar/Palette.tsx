@@ -1,7 +1,8 @@
 import {useBrush} from "@pathfinding/contexts";
 import {PaletteBrush} from "@pathfinding/types";
-import * as styles from "./Sidebar.styles";
+import * as styles from "./Palette.styles";
 import {Check} from "@mui/icons-material";
+import {Label} from "@common/components";
 
 const PALETTE_OPTIONS = [
     {
@@ -25,9 +26,7 @@ export function Palette() {
 
     return (
         <div data-tutorial-id="palette">
-            <label htmlFor="palette" css={styles.label}>
-                Palette
-            </label>
+            <Label htmlFor="palette">Palette</Label>
             <div id="palette" role="radiogroup" css={styles.paletteContainer}>
                 {PALETTE_OPTIONS.map(({label, type}) => {
                     const isActive = currentBrush === type;
