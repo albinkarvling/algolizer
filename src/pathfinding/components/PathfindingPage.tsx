@@ -16,7 +16,7 @@ export function PathfindingPage() {
                 <BrushProvider>
                     <main css={styles.container}>
                         <PathfindingSidebar />
-                        <div>
+                        <div css={styles.content}>
                             <PathfindingHeader />
                             <Board />
                         </div>
