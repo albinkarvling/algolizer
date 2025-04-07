@@ -10,6 +10,10 @@ const sidebar = css`
     width: var(--width-main-sidebar);
     min-width: var(--width-main-sidebar);
     padding: var(--main-padding);
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 const sidebarText = css`
     width: 120px;

@@ -16,7 +16,6 @@ export const container = (isMobile: boolean, isCollapsed: boolean) => css`
               top: 0;
               right: ${isCollapsed ? "100%" : "0"};
               z-index: 100;
-              height: 100vh;
               width: 100vw;
           `
         : ""}
