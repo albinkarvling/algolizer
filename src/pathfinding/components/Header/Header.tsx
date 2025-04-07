@@ -5,7 +5,12 @@ import {GRASS_WEIGHT, MUD_WEIGHT} from "@pathfinding/constants";
 
 export function PathfindingHeader() {
     return (
-        <Header cssProp={styles.content}>
+        <Header
+            cssProp={styles.content}
+            containerProps={{
+                "data-tutorial-id": "pathfinding-header",
+            }}
+        >
             <div css={styles.row}>
                 <Navigation sx={{rotate: "90deg"}} />
                 <span>Start Tile</span>

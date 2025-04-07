@@ -77,6 +77,7 @@ export function Board() {
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
             ref={containerRef}
+            data-tutorial-id="board"
         >
             {currentGrid.map((row, rowIndex) => (
                 <div css={styles.row} key={rowIndex}>

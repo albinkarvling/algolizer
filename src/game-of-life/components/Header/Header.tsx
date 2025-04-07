@@ -20,6 +20,9 @@ export function GameOfLifeHeader() {
                 }}
                 aria-label={`Generation: ${currentGeneration}. Click to view all generations.`}
                 cssProp={styles.historyButton}
+                buttonProps={{
+                    "data-tutorial-id": "history-button",
+                }}
             >
                 <History />
                 Generation: {currentGeneration}

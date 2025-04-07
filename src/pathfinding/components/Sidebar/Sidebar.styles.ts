@@ -67,6 +67,7 @@ export const footer = css`
     flex: 1;
     display: flex;
     align-items: end;
+    gap: 0.75rem;
     padding: var(--main-padding);
 `;
 

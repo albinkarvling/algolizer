@@ -48,6 +48,7 @@ const getBackgroundColor = (tile: Tile) => {
     if (tile.isPath) return "var(--tile-path)";
     if (tile.weight === GRASS_WEIGHT) return "var(--tile-grass)";
     if (tile.weight === MUD_WEIGHT) return "var(--tile-mud)";
+    return "var(--tile-empty)";
 };
 const getAnimation = (tile: Tile) => {
     if (tile.isEnd) return;

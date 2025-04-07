@@ -167,7 +167,7 @@ export function Board() {
     }, [handleMouseDown, handleMouseMove, handleMouseUp]);
 
     return (
-        <div css={styles.board} ref={containerRef}>
+        <div css={styles.board} ref={containerRef} data-tutorial-id="grid">
             <canvas
                 ref={canvasRef}
                 style={{display: "block", width: "100%", height: "100%"}}

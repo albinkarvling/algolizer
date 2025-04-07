@@ -25,7 +25,7 @@ export function Sidebar({children}: {children?: React.ReactNode}) {
 
     const isMobile = breakpoint === "tablet" || breakpoint === "mobile";
     return (
-        <aside css={styles.container(isMobile, isCollapsed)}>
+        <aside id="sidebar" css={styles.container(isMobile, isCollapsed)}>
             {isMobile && (
                 <Button
                     variant="text"

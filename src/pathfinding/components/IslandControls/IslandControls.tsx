@@ -23,6 +23,9 @@ export function PathfindingIslandControls() {
             onPlayToggle={setIsPlaying}
             isPlaying={isPlaying}
             shouldShow
+            containerProps={{
+                "data-tutorial-id": "island-controls",
+            }}
         />
     );
 }

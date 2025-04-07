@@ -24,7 +24,7 @@ export function Palette() {
     const handleChange = (option: PaletteBrush) => setCurrentBrush(option);
 
     return (
-        <div>
+        <div data-tutorial-id="palette">
             <label htmlFor="palette" css={styles.label}>
                 Palette
             </label>

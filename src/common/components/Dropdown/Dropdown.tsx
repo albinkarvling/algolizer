@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {HTMLAttributes, useRef, useState} from "react";
 import * as styles from "./Dropdown.styles";
 import {Button} from "../Button";
 import {ArrowForwardIos} from "@mui/icons-material";
@@ -39,6 +39,9 @@ type DropdownProps<TGroups extends readonly DropdownGroup[]> = {
     onSelect?: (item: InferDropdownItem<TGroups>) => void;
     noSelectionLabel?: string;
     cssProp?: Interpolation<Theme>;
+    dropdownProps?: HTMLAttributes<HTMLDivElement> & {
+        [key: `data-${string}`]: string;
+    };
 };
 
 export function Dropdown<TGroups extends readonly DropdownGroup[]>({
@@ -48,6 +51,7 @@ export function Dropdown<TGroups extends readonly DropdownGroup[]>({
     noSelectionLabel = "None selected",
     label,
     cssProp,
+    dropdownProps,
 }: DropdownProps<TGroups>) {
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -64,7 +68,7 @@ export function Dropdown<TGroups extends readonly DropdownGroup[]>({
         .find((item) => item.id === selectedId);
 
     return (
-        <div css={[styles.container, cssProp]} ref={containerRef}>
+        <div css={[styles.container, cssProp]} ref={containerRef} {...dropdownProps}>
             <label css={styles.label} htmlFor={label}>
                 {label}
             </label>

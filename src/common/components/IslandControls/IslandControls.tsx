@@ -2,6 +2,7 @@ import {ArrowBack, ArrowForward, Pause, PlayArrow} from "@mui/icons-material";
 import {Button} from "../Button";
 import * as styles from "./IslandControls.styles";
 import {AnimatePresence, motion} from "framer-motion";
+import {HTMLAttributes} from "react";
 
 const MIN_PLAYBACK_SPEED = 50;
 const MAX_PLAYBACK_SPEED = 2000;
@@ -15,6 +16,7 @@ export function IslandControls({
     shouldShow,
     maxPlaybackSpeed = MAX_PLAYBACK_SPEED,
     minPlaybackSpeed = MIN_PLAYBACK_SPEED,
+    containerProps,
 }: {
     isPlaying: boolean;
     onPlayToggle: (isPlaying: boolean) => void;
@@ -25,6 +27,12 @@ export function IslandControls({
     shouldShow: boolean;
     maxPlaybackSpeed?: number;
     minPlaybackSpeed?: number;
+    containerProps?: Omit<
+        HTMLAttributes<HTMLDivElement> & {
+            [key: `data-${string}`]: string;
+        },
+        "onAnimationStart" | "onDrag" | "onDragEnd" | "onDragStart"
+    >;
 }) {
     return (
         <AnimatePresence>
@@ -34,6 +42,7 @@ export function IslandControls({
                     animate={{transform: "translate(-50%, 0)"}}
                     exit={{transform: "translate(-50%, 150px)"}}
                     css={styles.container}
+                    {...containerProps}
                 >
                     <div css={styles.playbackButtons}>
                         <Button variant="text" size="small" onClick={onBackClick}>

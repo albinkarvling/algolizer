@@ -3,3 +3,4 @@ export * from "./Sidebar";
 export * from "./Button";
 export * from "./Dropdown";
 export * from "./IslandControls";
+export * from "./Tutorial";
