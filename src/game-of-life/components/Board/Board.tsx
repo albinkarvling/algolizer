@@ -15,7 +15,6 @@ export function Board() {
     const lastUpdatedCells = useRef<Set<string>>(new Set());
 
     useEffect(() => {
-        // determine how many rows and columns we can fit on the screen
         const onResize = () => {
             const canvas = canvasRef.current;
             if (!canvas || !canvas.parentElement) return;
@@ -28,11 +27,11 @@ export function Board() {
 
             setupGrid(rows, columns);
         };
+
         onResize();
-
         const resizeObserver = new ResizeObserver(onResize);
-
         resizeObserver.observe(containerRef.current!);
+
         return () => resizeObserver.disconnect();
     }, [setupGrid]);
 
@@ -58,7 +57,6 @@ export function Board() {
                         CELL_SIZE,
                         CELL_SIZE,
                     );
-
                     ctx.strokeStyle = gridColor;
                     ctx.strokeRect(
                         cellIndex * CELL_SIZE_WITH_BORDER,
@@ -79,9 +77,9 @@ export function Board() {
         if (!ctx) return;
 
         const scale = window.devicePixelRatio || 1;
-
         const width = canvas.parentElement.clientWidth;
         const height = canvas.parentElement.clientHeight;
+
         canvas.width = width * scale;
         canvas.height = height * scale;
         ctx.scale(scale, scale);
@@ -89,19 +87,18 @@ export function Board() {
         drawGrid(ctx, grid);
     }, [grid, drawGrid]);
 
-    const getCellFromMouseEvent = useCallback(
-        (event: MouseEvent) => {
+    const getCellFromCoords = useCallback(
+        (x: number, y: number) => {
             const canvas = canvasRef.current;
             if (!canvas) return null;
 
             const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+            const relativeX = x - rect.left;
+            const relativeY = y - rect.top;
 
-            const cellIndex = Math.floor(x / CELL_SIZE_WITH_BORDER);
-            const rowIndex = Math.floor(y / CELL_SIZE_WITH_BORDER);
+            const cellIndex = Math.floor(relativeX / CELL_SIZE_WITH_BORDER);
+            const rowIndex = Math.floor(relativeY / CELL_SIZE_WITH_BORDER);
 
-            // if we are outside the board, return null
             if (
                 rowIndex < 0 ||
                 rowIndex >= grid.length ||
@@ -116,37 +113,37 @@ export function Board() {
         [grid],
     );
 
-    const handleMouseDown = useCallback(
-        (event: MouseEvent) => {
+    const handleInteractionStart = useCallback(
+        (x: number, y: number) => {
             isDragging.current = true;
             lastUpdatedCells.current.clear();
 
-            const cell = getCellFromMouseEvent(event);
+            const cell = getCellFromCoords(x, y);
             if (cell) {
                 toggleCellState(cell.rowIndex, cell.cellIndex);
                 lastUpdatedCells.current.add(`${cell.rowIndex}-${cell.cellIndex}`);
             }
         },
-        [toggleCellState, getCellFromMouseEvent],
+        [getCellFromCoords, toggleCellState],
     );
 
-    const handleMouseMove = useCallback(
-        (event: MouseEvent) => {
+    const handleInteractionMove = useCallback(
+        (x: number, y: number) => {
             if (!isDragging.current) return;
 
-            const cell = getCellFromMouseEvent(event);
+            const cell = getCellFromCoords(x, y);
             if (!cell) return;
 
-            const cellKey = `${cell.rowIndex}-${cell.cellIndex}`;
-            if (lastUpdatedCells.current.has(cellKey)) return;
+            const key = `${cell.rowIndex}-${cell.cellIndex}`;
+            if (lastUpdatedCells.current.has(key)) return;
 
             toggleCellState(cell.rowIndex, cell.cellIndex);
-            lastUpdatedCells.current.add(cellKey);
+            lastUpdatedCells.current.add(key);
         },
-        [toggleCellState, getCellFromMouseEvent],
+        [getCellFromCoords, toggleCellState],
     );
 
-    const handleMouseUp = useCallback(() => {
+    const handleInteractionEnd = useCallback(() => {
         isDragging.current = false;
         lastUpdatedCells.current.clear();
     }, []);
@@ -155,16 +152,40 @@ export function Board() {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
+        const handleMouseDown = (e: MouseEvent) => {
+            handleInteractionStart(e.clientX, e.clientY);
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            handleInteractionMove(e.clientX, e.clientY);
+        };
+
+        const handleTouchStart = (e: TouchEvent) => {
+            e.preventDefault();
+            handleInteractionStart(e.touches[0].clientX, e.touches[0].clientY);
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            e.preventDefault();
+            handleInteractionMove(e.touches[0].clientX, e.touches[0].clientY);
+        };
+
         canvas.addEventListener("mousedown", handleMouseDown);
         canvas.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
+        canvas.addEventListener("touchstart", handleTouchStart, {passive: false});
+        canvas.addEventListener("touchmove", handleTouchMove, {passive: false});
+        window.addEventListener("mouseup", handleInteractionEnd);
+        window.addEventListener("touchend", handleInteractionEnd);
 
         return () => {
             canvas.removeEventListener("mousedown", handleMouseDown);
             canvas.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
+            canvas.removeEventListener("touchstart", handleTouchStart);
+            canvas.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("mouseup", handleInteractionEnd);
+            window.removeEventListener("touchend", handleInteractionEnd);
         };
-    }, [handleMouseDown, handleMouseMove, handleMouseUp]);
+    }, [handleInteractionStart, handleInteractionMove, handleInteractionEnd]);
 
     return (
         <div css={styles.board} ref={containerRef} data-tutorial-id="grid">
