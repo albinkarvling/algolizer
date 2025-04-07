@@ -33,8 +33,10 @@ const BoardTile = memo(
                 data-is-end={tile.isEnd}
                 style={{minWidth: TILE_SIZE, minHeight: TILE_SIZE}}
             >
-                {tile.isStart && <Navigation sx={{rotate: "90deg"}} />}
-                {tile.isEnd && <Flag />}
+                {tile.isStart && (
+                    <Navigation sx={{rotate: "90deg", pointerEvents: "none"}} />
+                )}
+                {tile.isEnd && <Flag sx={{pointerEvents: "none"}} />}
                 {tile.weight && <span css={styles.weight}>{tile.weight}</span>}
             </div>
         );
