@@ -1,4 +1,4 @@
-import {DropdownGroup} from "@common/components";
+import {DropdownGroup} from "@shared/components";
 
 export const ALGORITHM_SELECTION = [
     {

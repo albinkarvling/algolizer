@@ -1,19 +1,20 @@
 import {css} from "@emotion/react";
 
-export const mainContainer = css`
+export const container = css`
     background-color: var(--background-accent-sidebar);
     color: var(--text-primary-sidebar);
     display: flex;
-    flex-direction: column;
+    height: 100%;
 `;
 
 export const content = css`
-    padding: 1.25rem;
+    flex: 1;
 `;
 
 export const gameList = css`
     display: flex;
     gap: 0.75rem;
+    padding: 1.25rem;
 `;
 
 export const gameItem = css`

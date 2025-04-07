@@ -1,7 +1,7 @@
 import {ArrowBack} from "@mui/icons-material";
 import {useBoard, useSidebarState} from "@game-of-life/contexts";
 import {getAliveCellCount, getDeadCellCount} from "@game-of-life/utils";
-import {Button} from "@common/components";
+import {Button} from "@shared/components";
 import * as styles from "./History.styles";
 
 export function History() {

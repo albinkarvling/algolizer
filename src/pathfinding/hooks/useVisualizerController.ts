@@ -1,4 +1,4 @@
-import {useSyncedRef} from "@common/hooks";
+import {useSyncedRef} from "@shared/hooks";
 import {Step} from "@pathfinding/types";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 

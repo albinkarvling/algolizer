@@ -1,11 +1,11 @@
 import {useEffect, useRef, useState} from "react";
+import {ArrowBack} from "@mui/icons-material";
+import {useTutorial} from "@shared/contexts";
+import {useBreakPoints} from "@shared/hooks";
+import {useSidebarCollapsed} from "@shared/contexts";
+import {TutorialHighlightMask} from "./TutorialHighlightMask";
 import {Button} from "../Button";
 import * as styles from "./Tutorial.styles";
-import {useTutorial} from "@common/contexts/TutorialProvider";
-import {useSidebarCollapsed} from "@common/contexts/SidebarCollapsedProvider";
-import {useBreakPoints} from "@common/hooks/useBreakPoints";
-import {TutorialHighlightMask} from "./TutorialHighlightMask";
-import {ArrowBack} from "@mui/icons-material";
 
 const SPACE_FROM_ELEMENT = 24;
 const HIGHLIGHT_SPACING = 8;

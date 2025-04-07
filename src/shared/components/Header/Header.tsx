@@ -1,10 +1,10 @@
 import {HTMLAttributes} from "react";
-import {Interpolation, Theme} from "@emotion/react";
-import * as styles from "./Header.styles";
-import {useSidebarCollapsed} from "@common/contexts/SidebarCollapsedProvider";
-import {useBreakPoints} from "@common/hooks/useBreakPoints";
 import {Menu} from "@mui/icons-material";
+import {Interpolation, Theme} from "@emotion/react";
+import {useSidebarCollapsed} from "@shared/contexts";
+import {useBreakPoints} from "@shared/hooks";
 import {Button} from "../Button";
+import * as styles from "./Header.styles";
 
 export function Header({
     children,

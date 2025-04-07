@@ -2,6 +2,11 @@ import {css} from "@emotion/react";
 
 export const content = css`
     gap: 1.5rem;
+
+    // this is for the header menu that shows up on mobile
+    & > button:first-of-type {
+        margin-right: -0.5rem;
+    }
 `;
 
 export const row = css`

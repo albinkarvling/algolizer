@@ -1,11 +1,11 @@
-import {GAME_TYPES, GameId} from "@common/constants";
+import {useLocation} from "react-router";
+import {Menu} from "@mui/icons-material";
+import {useBreakPoints} from "@shared/hooks";
+import {GAME_TYPES, GameId} from "@shared/constants";
+import {useSidebarCollapsed} from "@shared/contexts";
 import {Dropdown, DropdownGroup, DropdownItem} from "../Dropdown";
 import * as styles from "./Sidebar.styles";
-import {useLocation} from "react-router";
-import {useBreakPoints} from "@common/hooks/useBreakPoints";
-import {useSidebarCollapsed} from "@common/contexts/SidebarCollapsedProvider";
 import {Button} from "../Button";
-import {Menu} from "@mui/icons-material";
 
 const gameItems = GAME_TYPES.map((gameType) => ({
     id: gameType.id,

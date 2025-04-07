@@ -1,7 +1,7 @@
-import {Header} from "@common/components";
 import {Flag, Navigation} from "@mui/icons-material";
-import * as styles from "./Header.styles";
+import {Header} from "@shared/components";
 import {GRASS_WEIGHT, MUD_WEIGHT} from "@pathfinding/constants";
+import * as styles from "./Header.styles";
 
 export function PathfindingHeader() {
     return (

@@ -1,4 +1,4 @@
-import {TutorialStep} from "@common/contexts/TutorialProvider";
+import {TutorialStep} from "@shared/contexts";
 
 export const SUPPORTS_WEIGHTS = ["dijkstra", "astar"];
 export const GRASS_WEIGHT = 3;

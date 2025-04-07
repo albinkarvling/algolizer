@@ -1,4 +1,4 @@
-import {TutorialStep} from "@common/contexts/TutorialProvider";
+import {TutorialStep} from "@shared/contexts";
 
 export * from "./presets";
 

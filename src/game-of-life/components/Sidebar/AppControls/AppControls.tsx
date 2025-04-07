@@ -1,4 +1,4 @@
-import {Dropdown} from "@common/components";
+import {Dropdown} from "@shared/components";
 import {DROPDOWN_PRESETS} from "@game-of-life/constants";
 import {useBoard} from "@game-of-life/contexts";
 import * as styles from "./AppControls.styles";

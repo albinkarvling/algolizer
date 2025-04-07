@@ -3,7 +3,7 @@ import {RestartAlt, Lightbulb} from "@mui/icons-material";
 import {AppControls} from "./AppControls";
 import * as styles from "./Sidebar.styles";
 import {History} from "./History";
-import {Sidebar, Button} from "@common/components";
+import {Sidebar, Button} from "@shared/components";
 import {useBoard, useSidebarState} from "@game-of-life/contexts";
 import {SIDEBAR_STATES} from "@game-of-life/constants";
 
@@ -39,6 +39,8 @@ export function GameOfLifeSidebar() {
                 <Button
                     buttonProps={{
                         "data-tutorial-id": "tutorial-button",
+                        "data-tooltip": "Show tutorial",
+                        "aria-label": "Show tutorial",
                     }}
                 >
                     <Lightbulb />

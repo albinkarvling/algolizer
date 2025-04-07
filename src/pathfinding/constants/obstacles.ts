@@ -1,4 +1,4 @@
-import {DropdownGroup, DropdownItem} from "@common/components";
+import {DropdownGroup, DropdownItem} from "@shared/components";
 import {blobMaze, recursiveDivision, staircase, zebraMaze} from "@pathfinding/obstacles";
 import {Tile} from "@pathfinding/types";
 

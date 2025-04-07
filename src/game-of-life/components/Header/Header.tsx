@@ -1,7 +1,7 @@
 import {History} from "@mui/icons-material";
-import {Button, Header} from "@common/components";
+import {Button, Header} from "@shared/components";
+import {useSidebarCollapsed} from "@shared/contexts";
 import {useBoard, useSidebarState} from "@game-of-life/contexts";
-import {useSidebarCollapsed} from "@common/contexts/SidebarCollapsedProvider";
 import * as styles from "./Header.styles";
 
 export function GameOfLifeHeader() {

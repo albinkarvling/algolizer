@@ -1,8 +1,8 @@
-import {ArrowBack, ArrowForward, Pause, PlayArrow} from "@mui/icons-material";
-import {Button} from "../Button";
-import * as styles from "./IslandControls.styles";
 import {HTMLAttributes} from "react";
-import {useKeyboardControls} from "@common/hooks";
+import {useKeyboardControls} from "@shared/hooks";
+import {ArrowBack, ArrowForward, Pause, PlayArrow} from "@mui/icons-material";
+import * as styles from "./IslandControls.styles";
+import {Button} from "../Button";
 
 type Props = {
     isPlaying: boolean;

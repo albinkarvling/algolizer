@@ -1,1 +1,0 @@
-export {SidebarCollapsedProvider} from "./SidebarCollapsedProvider";

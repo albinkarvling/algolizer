@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {usePlaying} from "@common/hooks";
+import {usePlaying} from "@shared/hooks";
 import {Preset, PRESET_GRIDS} from "@game-of-life/constants";
-import {useGenerationHistory} from "@game-of-life/hooks/useGenerationHistory";
+import {useGenerationHistory} from "@game-of-life/hooks";
 import {initializeGrid} from "@game-of-life/utils";
 import {Grid} from "@game-of-life/types";
 

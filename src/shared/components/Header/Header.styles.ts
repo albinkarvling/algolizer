@@ -21,4 +21,5 @@ export const header = css`
 export const menuButton = css`
     padding: 0.5rem;
     margin: -0.5rem;
+    margin-right: 0.5rem;
 `;

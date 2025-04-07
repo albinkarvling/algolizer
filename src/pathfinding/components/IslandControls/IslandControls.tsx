@@ -1,4 +1,4 @@
-import {IslandControls} from "@common/components";
+import {IslandControls} from "@shared/components";
 import {useBoard} from "@pathfinding/contexts";
 
 export function PathfindingIslandControls() {

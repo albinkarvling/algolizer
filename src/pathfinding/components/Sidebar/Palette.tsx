@@ -1,8 +1,8 @@
+import {Check} from "@mui/icons-material";
+import {Label} from "@shared/components";
 import {useBrush} from "@pathfinding/contexts";
 import {PaletteBrush} from "@pathfinding/types";
 import * as styles from "./Palette.styles";
-import {Check} from "@mui/icons-material";
-import {Label} from "@common/components";
 
 const PALETTE_OPTIONS = [
     {
@@ -26,8 +26,12 @@ export function Palette() {
 
     return (
         <div data-tutorial-id="palette">
-            <Label htmlFor="palette">Palette</Label>
-            <div id="palette" role="radiogroup" css={styles.paletteContainer}>
+            <Label id="palette-label">Palette</Label>
+            <div
+                role="radiogroup"
+                aria-describedby="palette-label"
+                css={styles.paletteContainer}
+            >
                 {PALETTE_OPTIONS.map(({label, type}) => {
                     const isActive = currentBrush === type;
                     const disabled = weightsAreDisabled && type !== "wall";
@@ -50,6 +54,7 @@ export function Palette() {
                                 checked={isActive}
                                 onChange={() => handleChange(type)}
                                 disabled={disabled}
+                                aria-label={label}
                                 key={type}
                             />
                         </div>

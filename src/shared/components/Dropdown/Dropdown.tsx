@@ -1,11 +1,10 @@
 import {HTMLAttributes, useRef, useState} from "react";
-import * as styles from "./Dropdown.styles";
-import {Button} from "../Button";
 import {ArrowForwardIos} from "@mui/icons-material";
-import {useClickOutside} from "@common/hooks";
-import {Interpolation} from "@emotion/react";
-import {Theme} from "@emotion/react";
+import {Interpolation, Theme} from "@emotion/react";
+import {useClickOutside} from "@shared/hooks";
+import {Button} from "../Button";
 import {Label} from "../Label";
+import * as styles from "./Dropdown.styles";
 
 /**
     Initially, the dropdown component had simpler typing. It worked, but
@@ -70,7 +69,9 @@ export function Dropdown<TGroups extends readonly DropdownGroup[]>({
 
     return (
         <div css={[styles.container, cssProp]} ref={containerRef} {...dropdownProps}>
-            <Label htmlFor={label}>{label}</Label>
+            <Label as="label" htmlFor={label}>
+                {label}
+            </Label>
 
             <button
                 id={label}
@@ -88,13 +89,11 @@ export function Dropdown<TGroups extends readonly DropdownGroup[]>({
 
             {open && (
                 <ul css={styles.dropdownGroups}>
-                    {groups.map((group, index) => (
-                        <li key={group.groupLabel || index}>
-                            {group.groupLabel && (
-                                <span css={styles.groupLabel}>{group.groupLabel}</span>
-                            )}
-                            <ul>
-                                {group.items.map((item) => (
+                    {groups.map(({groupLabel, items}, index) => (
+                        <li key={groupLabel || index}>
+                            {groupLabel && <Label id={groupLabel}>{groupLabel}</Label>}
+                            <ul aria-labelledby={groupLabel}>
+                                {items.map((item) => (
                                     <li key={item.id}>
                                         <Button
                                             size="small"

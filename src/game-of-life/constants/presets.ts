@@ -1,4 +1,4 @@
-import {DropdownGroup} from "@common/components";
+import {DropdownGroup} from "@shared/components";
 
 export type Preset = keyof typeof PRESET_GRIDS;
 

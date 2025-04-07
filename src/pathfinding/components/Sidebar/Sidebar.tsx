@@ -1,11 +1,11 @@
-import {Button, Dropdown, Sidebar} from "@common/components";
+import {Lightbulb, RestartAlt} from "@mui/icons-material";
+import {useTutorial} from "@shared/contexts";
+import {Button, Dropdown, Sidebar} from "@shared/components";
 import {ALGORITHM_SELECTION} from "@pathfinding/constants/algorithmSelection";
 import {useBoard} from "@pathfinding/contexts";
-import * as styles from "./Sidebar.styles";
 import {OBSTACLE_SELECTION} from "@pathfinding/constants/obstacles";
 import {Palette} from "./Palette";
-import {Lightbulb, RestartAlt} from "@mui/icons-material";
-import {useTutorial} from "@common/contexts/TutorialProvider";
+import * as styles from "./Sidebar.styles";
 
 export function PathfindingSidebar() {
     const {resetTutorial} = useTutorial();
@@ -50,6 +50,7 @@ export function PathfindingSidebar() {
                     buttonProps={{
                         "data-tutorial-id": "tutorial-button",
                         "data-tooltip": "Show tutorial",
+                        "aria-label": "Show tutorial",
                     }}
                     onClick={resetTutorial}
                     aria-label="Show tutorial"

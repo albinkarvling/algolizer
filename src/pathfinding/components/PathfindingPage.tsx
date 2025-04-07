@@ -1,22 +1,25 @@
-import {PathfindingHeader} from "./Header";
-import {Board} from "./Board";
 import "./Pathfinding.css";
+import {Tutorial} from "@shared/components";
+import {TutorialProvider} from "@shared/contexts";
 import {BoardProvider, BrushProvider} from "@pathfinding/contexts";
+import {PATH_FINDING_TUTORIAL_STEPS} from "@pathfinding/constants";
 import {PathfindingIslandControls} from "./IslandControls";
 import {PathfindingSidebar} from "./Sidebar";
-import {Tutorial} from "@common/components";
-import {PATH_FINDING_TUTORIAL_STEPS} from "@pathfinding/constants";
-import {TutorialProvider} from "@common/contexts/TutorialProvider";
+import {PathfindingHeader} from "./Header";
+import {Board} from "./Board";
+import * as styles from "./PathfindingPage.styles";
 
 export function PathfindingPage() {
     return (
         <TutorialProvider steps={PATH_FINDING_TUTORIAL_STEPS} id="pathfinding">
             <BoardProvider>
                 <BrushProvider>
-                    <PathfindingSidebar />
-                    <main>
-                        <PathfindingHeader />
-                        <Board />
+                    <main css={styles.container}>
+                        <PathfindingSidebar />
+                        <div>
+                            <PathfindingHeader />
+                            <Board />
+                        </div>
                         <PathfindingIslandControls />
                     </main>
                     <Tutorial />
