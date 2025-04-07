@@ -26,7 +26,7 @@ export const PATH_FINDING_TUTORIAL_STEPS: TutorialStep[] = [
         id: "island-controls",
         header: "Playback Controls",
         description:
-            "Use the playback controls to start, pause, go back and forward through the steps of the algorithm.",
+            "Use the playback controls to start, pause, go back and forward through the steps of the algorithm. You can also use space and the arrow keys.",
     },
     {
         id: "palette",

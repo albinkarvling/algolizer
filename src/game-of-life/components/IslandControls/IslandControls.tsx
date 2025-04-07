@@ -19,7 +19,7 @@ export function GameOfLifeIslandControls() {
             onPlayToggle={setIsPlaying}
             playbackSpeed={playbackSpeed}
             onSpeedChange={setPlaybackSpeed}
-            shouldShow
+            playbackLabel="Playback speed"
             containerProps={{
                 "data-tutorial-id": "playback-controls",
             }}

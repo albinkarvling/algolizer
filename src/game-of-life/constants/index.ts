@@ -23,7 +23,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
         id: "playback-controls",
         header: "Playback Controls",
         description:
-            "The playback controls allow you to start, pause, and step through the simulation.",
+            "The playback controls allow you to start, pause, and step through the simulation. You can also use space and the arrow keys.",
     },
     {
         id: "history-button",
